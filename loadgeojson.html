@@ -41,7 +41,8 @@
                     const latCell = document.createElement('td');
                     const lonCell = document.createElement('td');
 
-                    let jmeno[]=(feature.properties.nazev);
+                    let jmeno = [];
+                    jmeno = (feature.properties.nazev);
                     alert(jmeno);
                     idCell.textContent = feature.properties.nazev;
                     latCell.textContent = coordinates[1];
