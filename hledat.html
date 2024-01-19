@@ -102,6 +102,7 @@ const geojsonFile = 'KHK_muzea.geojson';
                     alert(body);
                 } else {
                     console.error('Neočekávaný typ GeoJSON. Očekáváme FeatureCollection.');
+                    alert("CHYBA NAČÍTÁNÍ GEOJSON");
                 }
             })
             .catch(error => {
