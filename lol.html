@@ -1,42 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>GeoJSON na Tabulku</title>
-    <style>
-        table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid black; padding: 8px; text-align: left; }
-    </style>
+    <title>GeoJSON na mapě</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
-    <table id="geojsonTable">
-        <thead>
-            <tr>
-                <th>Název</th>
-                <th>Latitude</th>
-                <th>Longitude</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-
+    <div id="mapid" style="height: 600px;"></div>
     <script>
-        // Předpokládáme, že máte GeoJSON soubor s názvem "data.geojson"
-        fetch('KHK_Architektonicke_pamatky.geojson')
-            .then(response => response.json())
-            .then(data => {
-                const table = document.getElementById('geojsonTable').getElementsByTagName('tbody')[0];
-                data.features.forEach((feature) => {
-                    const row = table.insertRow();
-                    const nameCell = row.insertCell(0);
-                    const latCell = row.insertCell(1);
-                    const lonCell = row.insertCell(2);
+        var map = L.map('mapid').setView([50.0755, 14.4378], 13); // Nastavení mapy na Prahu
 
-                    nameCell.innerHTML = feature.properties.nazev;
-                    latCell.innerHTML = feature.geometry.coordinates[1];
-                    lonCell.innerHTML = feature.geometry.coordinates[0];
-                });
-            });
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
+
+        // Předpokládáme, že máte GeoJSON soubor dostupný na URL 'data.geojson'
+        fetch('KHK_Architektonicke_pamatky.geojson')
+        .then(response => response.json())
+        .then(data => {
+            L.geoJSON(data).addTo(map);
+        });
     </script>
 </body>
 </html>
