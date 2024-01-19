@@ -1,4 +1,35 @@
 <script>
+
+//--------------------------------------------------------------------------------
+//---------načtení zadaných parametrů--------------------------------------------
+//--------------------------------------------------------------------------------
+  
+function getGETParameters() {
+    let params = {};
+    let parser = document.createElement('a');
+    parser.href = window.location.href;
+    let query = parser.search.substring(1);
+    let vars = query.split('&');
+    for (let i = 0; i < vars.length; i++) {
+        let pair = vars[i].split('=');
+        params[pair[0]] = decodeURIComponent(pair[1]);
+    }
+    return params;
+}
+
+  console.log(getGETParameters());
+  
+  
+  
+  
+  
+//--------------------------------------------------------------------------------
+//---------vyfiltrování datových sad podle kategorií------------------------------
+//--------------------------------------------------------------------------------
+
+
+
+  
   let geojsonFiles = ["KHK_arch.geojson", 
                       "KHK_cirkev.geojson", 
                       "KHK_infocentra.geojson", 
@@ -15,4 +46,7 @@
   });
 
   console.log(filtrat);
+
+
+  
 </script>
