@@ -56,6 +56,14 @@
                 }).addTo(map);
             });
         });
+
+
+        var markerA = L.marker([50.84673, 4.35247]).addTo(map);
+var markerB = L.marker([50.85045, 4.34878]).addTo(map);
+var route = L.polyline([markerA.getLatLng(), markerB.getLatLng()], {color: 'red'}).addTo(map);
+
+
+        
     </script>
 </body>
 </html>
