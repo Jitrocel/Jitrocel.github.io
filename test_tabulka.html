@@ -23,8 +23,9 @@
 </table>
 
 <script>
+    function loadGEOJSON(route){
     // Načtení GeoJSON souboru (předpokládá se, že je umístěn ve stejném adresáři jako HTML soubor)
-    fetch('KHK_rozhledny.geojson')
+    fetch(route)
         .then(response => response.json())
         .then(data => {
             // Funkce pro vložení dat do tabulky
@@ -59,6 +60,10 @@
             populateTable(features);
         })
         .catch(error => console.error('Error loading GeoJSON:', error));
+    }
+
+    loadGEOJSON('KHK_rozhledny.geojson');
+    
 </script>
 
 </body>
