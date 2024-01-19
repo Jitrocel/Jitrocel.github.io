@@ -44,15 +44,17 @@
                     map.setView(qrCoordinates, 13);
 
                     // Načtení .geojson souborů
-                    let geojsonFiles = ['KHK_cirkev_pamatky.geojson', 'KHK_infocentra.geojson', 'KHK_muzea.geojson', 'KHK_pamatky_arch.geojson', 'KHK_pamatky_zidov.geojson', 'KHK_rozhledny.geojson'];  // nahradit skutečnými názvy souborů
+                    let geojsonFiles = ['file1.geojson', 'file2.geojson'];  // nahradit skutečnými názvy souborů
                     geojsonFiles.forEach(file => {
                         axios.get(file).then(response => {
                             let data = response.data;
-                            let points = data.features.map(feature => feature.geometry.coordinates.reverse());
-                            let distances = points.map(point => turf.distance(qrCoordinates, point));
-                            let sortedIndices = distances.map((d, i) => i).sort((a, b) => distances[a] - distances[b]);
-                            let nearestPoints = sortedIndices.slice(0, 5).map(i => points[i]);
-                            nearestPoints.forEach(point => L.marker(point).addTo(map));
+                            let points = data.features.map(feature => {
+                                let coordinates = feature.geometry.coordinates.reverse();
+                                if (turf.booleanEqual(qrCoordinates, coordinates)) {
+                                    console.log('Found matching point:', feature.properties.name, coordinates);
+                                }
+                                return coordinates;
+                            });
                         });
                     });
                 }
