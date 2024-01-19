@@ -55,17 +55,17 @@ alert(kategorie);
 //--------------------------------------------------------------------------------
 
 
-for (let i = 0; i < geojsonFiles.length; i++) {
-    if (geojsonFiles[i].includes(kategorie)) {
-        filtrat = geojsonFiles[i];
+for (let i = 0; i < filtrat.length; i++) {
+    if (filtrat[i].includes(kategorie)) {
+        filtrat_2 = filtrat[i];
         break;
     }
 }
 
-console.log(filtrat);
+console.log(filtrat_2);
 alert(filtrat);
 
-document.write("<meta http-equiv='refresh' content='0;url=mapa.html?kategorie="+filtrat+"'>");
+document.write("<meta http-equiv='refresh' content='0;url=mapa.html?kategorie="+filtrat_2+"'>");
 
   
 </script>
