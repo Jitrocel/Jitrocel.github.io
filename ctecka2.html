@@ -56,9 +56,9 @@
                                     let featureLat = feature.geometry.coordinates[1];
                                     let featureLon = feature.geometry.coordinates[0];
                                     // Porovnáváme souřadnice
-                                    if (Math.abs(featureLat - lat) == 0 && Math.abs(featureLon - lon) == 0) {
+                                    if (Math.abs(featureLat - lat) <0.01 && Math.abs(featureLon - lon) <0.01) {
                                         // Pokud se souřadnice shodují, vypíšeme alert
-                                        alert('Souřadnice: ' + featureLat + ', ' + featureLon + ', Název bodu: ' + feature.properties.name);
+                                        alert('Souřadnice: ' + featureLat + ', ' + featureLon + ');
                                         break;
                                     }
                                     else{
