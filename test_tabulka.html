@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoJSON Table</title>
+</head>
+<body>
+
+<h2>GeoJSON Table</h2>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+        </tr>
+    </thead>
+    <tbody id="geoTableBody">
+        <!-- Table body will be populated dynamically -->
+    </tbody>
+</table>
+
+<script>
+    // Načtení GeoJSON souboru (předpokládá se, že je umístěn ve stejném adresáři jako HTML soubor)
+    fetch('KHK_rozhledny.geojson')
+        .then(response => response.json())
+        .then(data => {
+            // Funkce pro vložení dat do tabulky
+            function populateTable(features) {
+                const tableBody = document.getElementById('geoTableBody');
+
+                features.forEach(feature => {
+                    const geometry = feature.geometry;
+                    const coordinates = geometry.coordinates;
+
+                    const row = document.createElement('tr');
+                    const idCell = document.createElement('td');
+                    const latCell = document.createElement('td');
+                    const lonCell = document.createElement('td');
+
+                    idCell.textContent = feature.id;
+                    latCell.textContent = coordinates[1];
+                    lonCell.textContent = coordinates[0];
+
+                    row.appendChild(idCell);
+                    row.appendChild(latCell);
+                    row.appendChild(lonCell);
+
+                    tableBody.appendChild(row);
+                });
+            }
+
+            // Získání seznamu prvků (bodů) z GeoJSON dat
+            const features = data.features;
+
+            // Volání funkce pro vložení dat do tabulky
+            populateTable(features);
+        })
+        .catch(error => console.error('Error loading GeoJSON:', error));
+</script>
+
+</body>
+</html>
