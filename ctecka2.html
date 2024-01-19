@@ -17,7 +17,7 @@
             let lon = coordinates[0];
             let lat = coordinates[1];
 
-            $.getJSON('cesta_k_geojson_souboru.geojson', function(data) {
+            $.getJSON('KHK_muzea.geojson', function(data) {
                 let geojson = data;
 
                 for (let feature of geojson.features) {
