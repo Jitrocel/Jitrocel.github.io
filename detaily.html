@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GeoJSON Reader</title>
+</head>
+<body>
+    <div id="info"></div>
+
+    <script>
+        // Místo, které hledáme
+        var misto = { lon: 15.761246, lat: 50.0755, };  // KHK muzeum jako příklad
+      
+        // Načtení .geojson souborů
+        fetch("KHK_muzea.geojson")
+            .then(response => response.json())
+            .then(data => {
+                // Procházíme všechny body v .geojson souboru
+                for (let feature of data.features) {
+                    let featureLat = feature.geometry.coordinates[1];
+                    let featureLon = feature.geometry.coordinates[0];
+                    // Porovnáváme souřadnice
+                    if (Math.abs(featureLat - misto.lat) < 0.0001 && Math.abs(featureLon - misto.lon) < 0.0001) {
+                        // Pokud se souřadnice shodují, vypíšeme informace do dokumentu
+                        document.getElementById('info').innerHTML += 'Souřadnice: ' + featureLat + ', ' + featureLon + ', Název bodu: ' + feature.properties.name + '<br>';
+                    }
+                }
+            });
+    </script>
+</body>
+</html>
