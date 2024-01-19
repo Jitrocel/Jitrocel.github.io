@@ -12,7 +12,7 @@
 <table border="1">
     <thead>
         <tr>
-            <th>NÁZEV_</th>
+            <th>NÁZEV</th>
             <th>Latitude</th>
             <th>Longitude</th>
         </tr>
@@ -40,7 +40,7 @@
                     const latCell = document.createElement('td');
                     const lonCell = document.createElement('td');
 
-                    idCell.textContent = feature.nazev;
+                    idCell.textContent = feature.properties.nazev;
                     latCell.textContent = coordinates[1];
                     lonCell.textContent = coordinates[0];
 
