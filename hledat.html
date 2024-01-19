@@ -73,33 +73,39 @@ alert(filtrat_2);
 //---------načtení bodů z odfiltrovaných seznamů do pole--------------------------
 //--------------------------------------------------------------------------------
 
-const fs = require('fs');
+const geojsonFile = 'KHK_muzea.geojson';
 
-// Název souboru GeoJSON
-const geojsonFile = 'KHK_rozhledny.geojson';
+        // Načtení obsahu souboru pomocí Fetch API
+        fetch(geojsonFile)
+            .then(response => response.json())
+            .then(data => {
+                const body = [];
 
-// Načtení obsahu souboru
-fs.readFile(geojsonFile, 'utf8', (err, data) => {
-    const geojson = JSON.parse(data);
+                // Zpracování GeoJSON dat
+                if (data.type === 'FeatureCollection') {
+                    data.features.forEach(feature => {
+                        if (feature.type === 'Feature' && feature.geometry.type === 'Point') {
+                            const nazev = feature.properties && feature.properties.nazev;
+                            const souradnice = feature.geometry.coordinates;
 
-    const body = [];
+                            if (nazev && souradnice) {
+                                body.push({
+                                    nazev: nazev,
+                                    souradnice: souradnice
+                                });
+                            }
+                        }
+                    });
 
-    geojson.features.forEach(feature => {
-        if (feature.type === 'Feature' && feature.geometry.type === 'Point') {
-            const nazev = feature.properties && feature.properties.nazev;
-            const souradnice = feature.geometry.coordinates;
-
-            if (nazev && souradnice) {
-                body.push({
-                    nazev: nazev,
-                    souradnice: souradnice
-                });
-            }
-        }
-    });
-
-    console.log('Informace o bodech:', body);
-});
+                    // Výpis pole s informacemi o bodech
+                    console.log('Informace o bodech:', body);
+                } else {
+                    console.error('Neočekávaný typ GeoJSON. Očekáváme FeatureCollection.');
+                }
+            })
+            .catch(error => {
+                console.error('Chyba při načítání GeoJSON:', error);
+            });
   
 //--------------------------------------------------------------------------------
 //---------přesměrování na mapu s vyzobrazenými body------------------------------
