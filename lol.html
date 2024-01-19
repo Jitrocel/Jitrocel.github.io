@@ -24,13 +24,20 @@
             }
         }
 
-        // Předpokládáme, že máte GeoJSON soubor dostupný na URL 'data.geojson'
-        fetch('KHK_Architektinicke_pamatky.geojson')
-        .then(response => response.json())
-        .then(data => {
-            L.geoJSON(data, {
-                onEachFeature: onEachFeature
-            }).addTo(map);
+        var colors = ["red", "blue", "green"]; // Barvy pro různé soubory
+        var files = ["data1.geojson", "data2.geojson", "data3.geojson"]; // URL vašich GeoJSON souborů
+
+        files.forEach(function(file, index) {
+            fetch(file)
+            .then(response => response.json())
+            .then(data => {
+                L.geoJSON(data, {
+                    onEachFeature: onEachFeature,
+                    pointToLayer: function (feature, latlng) {
+                        return L.circleMarker(latlng, { color: colors[index] });
+                    }
+                }).addTo(map);
+            });
         });
     </script>
 </body>
