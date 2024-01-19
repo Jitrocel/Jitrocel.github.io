@@ -4,29 +4,26 @@
 //---------načtení zadaných parametrů--------------------------------------------
 //--------------------------------------------------------------------------------
   
-function getGETParameters() {
-    let params = {};
-    let parser = document.createElement('a');
-    parser.href = window.location.href;
-    let query = parser.search.substring(1);
-    let vars = query.split('&');
-    for (let i = 0; i < vars.length; i++) {
-        let pair = vars[i].split('=');
-        params[pair[0]] = decodeURIComponent(pair[1]);
+function getURLParameters() {
+    var params = {};
+    var url = window.location.href;
+    var idx = url.indexOf('?');
+
+    if (idx !== -1) {
+        var queryStr = url.slice(idx + 1);
+        var paramTuples = queryStr.split('&');
+        for (var i = 0; i < paramTuples.length; i++) {
+            var tuple = paramTuples[i].split('=');
+            params[tuple[0]] = tuple[1];
+        }
     }
+
     return params;
 }
 
-  console.log(getGETParameters());
+var params = getURLParameters();
+console.log(params);
   
-
-
-  prm = getGETParameters();
-  console.log(prm[2]); 
-
-
-  
- 
 //--------------------------------------------------------------------------------
 //---------vyfiltrování datových sad podle kategorií------------------------------
 //--------------------------------------------------------------------------------
