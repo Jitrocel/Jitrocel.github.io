@@ -85,18 +85,20 @@ fs.readFile(filtrat_2, 'utf8', (err, data) => {
     const obj = JSON.parse(data);
 
     // Vytvořte pole pro body
-    let body = [];
+    let szn = [];
 
     // Projděte všechny prvky v objektu GeoJSON
     for (let feature of obj.features) {
         // Přidejte název a polohu do pole
-        body.push({
+        szn.push({
             nazev: feature.properties.name,
             poloha: feature.geometry.coordinates
         });
     }
 
     // Vypište body do tabulky
+    alert(szn)
+    alert("proběhne výpis do tabulky:");
     console.table(body);
 });
 
