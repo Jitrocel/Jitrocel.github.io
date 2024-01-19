@@ -39,6 +39,9 @@ for(let i = 0; i < geojsonFiles.length; i++) {
     if(geojsonFiles[i].includes(filtr_kategorie)) {
         filtrat[i]=(geojsonFiles[i]);
     }
+  else{
+    i--;
+  }
 }
 
 console.log(filtrat);
