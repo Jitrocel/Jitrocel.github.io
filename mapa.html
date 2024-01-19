@@ -37,7 +37,7 @@
                       "black"];
         
         let urlHL = new URL(window.location.href);
-        let paramsHL = new URLSearchParams(url.search);
+        let paramsHL = new URLSearchParams(urlHL.search);
         if(paramsHL.has('kategorie')) {
             let urlParams = new URLSearchParams(window.location.search);
             let kat = urlParams.get('kategorie');
