@@ -36,12 +36,28 @@
                       "brown",
                       "black"];
         
-        let urlHL = new URL(window.location.href);
-        let paramsHL = new URLSearchParams(urlHL.search);
-        if(paramsHL.has('kategorie')) {
-            let urlParams = new URLSearchParams(window.location.search);
-            let kat = urlParams.get('kategorie');
-            var files = [kat];
+
+// Načte URL aktuální stránky do proměnné "akturl"
+var akturl = window.location.href;
+
+// Rozdělí obsah proměnné "akturl" znakem "?"
+var urlCasti = akturl.split("?");
+
+// Druhou část vloží do proměnné "kat_sh"
+var kat_sh = urlCasti[1];
+
+// Rozdělí proměnnou "kat_sh" znakem "="
+var katCasti = kat_sh.split("=");
+
+// Druhou část uloží do proměnné "kategorie"
+var kategorie = katCasti[1];
+
+console.log(kategorie);
+
+        
+        
+        if(kategorie) {
+           var files = [kategorie];
             alert("par");
         } else {
             var files = ["KHK_arch.geojson", 
@@ -73,12 +89,7 @@
         });
 
 
-L.Routing.control({
-    waypoints: [
-        L.latLng(50, 15),
-        L.latLng(51, 14)
-    ]
-}).addTo(map);
+
 
 
         
