@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GeoJSON na Tabulku</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <table id="geojsonTable">
+        <thead>
+            <tr>
+                <th>Název</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script>
+        fetch('data.geojson')
+        .then(response => response.json())
+        .then(data => {
+            const table = document.getElementById('geojsonTable').getElementsByTagName('tbody')[0];
+            data.features.forEach((feature) => {
+                let row = table.insertRow();
+                let nameCell = row.insertCell(0);
+                let latCell = row.insertCell(1);
+                let lonCell = row.insertCell(2);
+                nameCell.innerHTML = feature.properties.name;
+                latCell.innerHTML = feature.geometry.coordinates[1];
+                lonCell.innerHTML = feature.geometry.coordinates[0];
+            });
+        });
+    </script>
+</body>
+</html>
