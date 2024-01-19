@@ -14,10 +14,10 @@
         let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
         scanner.addListener('scan', function (content) {
             let coordinates = content.split(',');
-            let lon = coordinates[0];
-            let lat = coordinates[1];
+            let lon = parseFloat(coordinates[0]);
+            let lat = parseFloat(coordinates[1]);
 
-            $.getJSON('KHK_muzea.geojson', function(data) {
+            $.getJSON('cesta_k_geojson_souboru.geojson', function(data) {
                 let geojson = data;
 
                 for (let feature of geojson.features) {
