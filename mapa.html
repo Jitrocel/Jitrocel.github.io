@@ -24,8 +24,23 @@
             }
         }
 
-        var colors = ["blue", "red", "white", "white", "yellow", "gray", "green", "brown"]; // Barvy pro různé soubory
-        var files = ["KHK_arch.geojson", "KHK_muzea.geojson", "KHK_cirkev.geojson", "KHK_zidov.geojson", "KHK_infocentra.geojson", "KHK_pevnosti.geojson", "KHK_prirodni_zajimavosti.geojson", "KHK_rozhledny.geojson"]; // URL vašich GeoJSON souborů
+        var colors = ["blue", 
+                      "red", 
+                      "white", 
+                      "white", 
+                      "yellow", 
+                      "gray", 
+                      "green", 
+                      "brown"];
+        
+        var files = ["KHK_arch.geojson", 
+                     "KHK_muzea.geojson", 
+                     "KHK_cirkev.geojson", 
+                     "KHK_zidov.geojson", 
+                     "KHK_infocentra.geojson", 
+                     "KHK_pevnosti.geojson", 
+                     "KHK_prirodni_zajimavosti.geojson", 
+                     "KHK_rozhledny.geojson"];
 
         files.forEach(function(file, index) {
             fetch(file)
