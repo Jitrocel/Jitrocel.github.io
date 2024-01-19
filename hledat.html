@@ -38,13 +38,13 @@ function getGETParameters() {
                       "KHK_prirodni_zajimavosti.geojson", 
                       "KHK_rozhledny.geojson",
                       "KHK_zidov_cirkev.geojson", 
-                      "název3.geojson"]; // nahraďte svými názvy souborů
-  let filtr_kategorie = "cirkev"; // nahraďte svým filtrem
+                      "název3.geojson"];
+  let filtr_kategorie = params[2] // parametr č2 (kategorie)
 
   let filtrat = geojsonFiles.filter((fileName) => {
     return fileName.includes(filtr_kategorie);
   });
-
+  console.log(filtr_kategorie);
   console.log(filtrat);
 
 
