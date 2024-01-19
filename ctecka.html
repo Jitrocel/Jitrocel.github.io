@@ -37,42 +37,7 @@
             }
             requestAnimationFrame(tick);
         }
-        import qrcode
-import json
-from geopy.distance import geodesic
-import folium
-
-# Načtení QR kódu
-img = qrcode.make('data to encode')
-img.save('qrcode.png')
-
-# Načtení souřadnic z QR kódu
-qr_coordinates = (50.0755, 14.4378)  # nahradit skutečnými souřadnicemi z QR kódu
-
-# Načtení .geojson souborů
-geojson_files = ['KHK_arch_pamatky.geojson', 'KHK_cirkev_pamatky.geojson', 'KHK_pevnosti.geojson','KHK_rozhledny.geojson',]  # nahradit skutečnými názvy souborů
-
-points = []
-for file in geojson_files:
-    with open(file, 'r') as f:
-        data = json.load(f)
-        for feature in data['features']:
-            coordinates = feature['geometry']['coordinates']
-            points.append((coordinates[1], coordinates[0]))  # převod na (lat, lon)
-
-# Výpočet vzdáleností a nalezení 5 nejbližších bodů
-distances = [(point, geodesic(qr_coordinates, point).km) for point in points]
-distances.sort(key=lambda x: x[1])
-nearest_points = distances[:5]
-
-# Vytvoření mapy
-m = folium.Map(location=qr_coordinates, zoom_start=13)
-folium.Marker(qr_coordinates, popup='QR Code Point', icon=folium.Icon(color='red')).add_to(m)
-for point, distance in nearest_points:
-    folium.Marker(point, popup=f'Distance: {distance} km').add_to(m)
-
-# Zobrazení mapy
-m.save('map.html')
+      
     </script>
 </body>
 </html>
