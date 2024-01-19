@@ -14,11 +14,23 @@
             maxZoom: 19,
         }).addTo(map);
 
+        function onEachFeature(feature, layer) {
+            // Kontrola, zda má feature vlastnosti
+            if (feature.properties) {
+                // Přidání popup okna s detaily o místě
+                layer.bindPopup(Object.keys(feature.properties).map(function(k) {
+                    return k + ": " + feature.properties[k];
+                }).join("<br />"), {maxHeight: 200});
+            }
+        }
+
         // Předpokládáme, že máte GeoJSON soubor dostupný na URL 'data.geojson'
-        fetch('KHK_Architektonicke_pamatky.geojson')
+        fetch('KHK_Architektinicke_pamatky.geojson')
         .then(response => response.json())
         .then(data => {
-            L.geoJSON(data).addTo(map);
+            L.geoJSON(data, {
+                onEachFeature: onEachFeature
+            }).addTo(map);
         });
     </script>
 </body>
