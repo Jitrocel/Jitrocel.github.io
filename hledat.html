@@ -68,14 +68,14 @@ for (let i = 0; i < filtrat.length; i++) {
 }
 
 console.log(filtrat_2);
-alert(filtrat);
+alert(filtrat_2);
 //--------------------------------------------------------------------------------
 //---------načtení bodů z odfiltrovaných seznamů do pole--------------------------
 //--------------------------------------------------------------------------------
   const fs = require('fs');
 
 // Načtěte soubor GeoJSON
-fs.readFile('cesta_k_souboru.geojson', 'utf8', (err, data) => {
+fs.readFile(filtrat_2, 'utf8', (err, data) => {
     if (err) {
         console.error("Nastala chyba při čtení souboru:", err);
         return;
