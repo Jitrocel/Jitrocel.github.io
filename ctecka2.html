@@ -39,13 +39,13 @@
                     inversionAttempts: "dontInvert",
                 });
                 if (code) {
-                    var coords = code.data.match(/(.*),\s*(.*)/);  // předpokládáme, že souřadnice jsou ve formátu lon, lat
+                    var coords = code.data.match(/(.*),\s*(.*)/);  // předpokládáme, že souřadnice jsou ve formátu lat, lon
                     if (coords && coords.length === 3) {
-                        var lon = parseFloat(coords[1]);
-                        var lat = parseFloat(coords[2]);
+                        var lat = parseFloat(coords[1]);
+                        var lon = parseFloat(coords[2]);
                         // Aktualizace mapy
-                        map.setView([lon, lat]);
-                        L.marker([lon, lat]).addTo(map);
+                        map.setView([lat, lon]);
+                        L.marker([lat, lon]).addTo(map);
 
                         // Načtení .geojson souborů
                         fetch("KHK_muzea.geojson")
@@ -53,12 +53,12 @@
                             .then(data => {
                                 // Procházíme všechny body v .geojson souboru
                                 for (let feature of data.features) {
-                                    let featureLon = feature.geometry.coordinates[1];
-                                    let featureLat = feature.geometry.coordinates[0];
+                                    let featureLat = feature.geometry.coordinates[1];
+                                    let featureLon = feature.geometry.coordinates[0];
                                     // Porovnáváme souřadnice
-                                    if (Math.abs(featureLon - lon) < 0.0001 && Math.abs(featureLat - lat) < 0.0001) {
+                                    if (Math.abs(featureLat - lat) < 0.0001 && Math.abs(featureLon - lon) < 0.0001) {
                                         // Pokud se souřadnice shodují, vypíšeme alert
-                                        alert('Souřadnice: ' + featureLon + ', ' + featureLat + ', Název bodu: ' + feature.properties.name);
+                                        alert('Souřadnice: ' + featureLat + ', ' + featureLon + ', Název bodu: ' + feature.properties.name);
                                         break;
                                     }
                                     else{
