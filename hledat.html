@@ -4,25 +4,14 @@
 //---------načtení zadaných parametrů--------------------------------------------
 //--------------------------------------------------------------------------------
   
-function getURLParameters() {
-    var params = {};
-    var url = window.location.href;
-    var idx = url.indexOf('?');
+// Vytvoření objektu URL
+let url = new URL(window.location.href);
 
-    if (idx !== -1) {
-        var queryStr = url.slice(idx + 1);
-        var paramTuples = queryStr.split('&');
-        for (var i = 0; i < paramTuples.length; i++) {
-            var tuple = paramTuples[i].split('=');
-            params[tuple[0]] = tuple[1];
-        }
-    }
+// Získání hodnoty parametru "kategorie"
+let kategorie = url.searchParams.get("kategorie");
 
-    return params;
-}
-
-var params = getURLParameters();
-console.log(params);
+// Vypsání hodnoty parametru "kategorie"
+console.log(kategorie);
   
 //--------------------------------------------------------------------------------
 //---------vyfiltrování datových sad podle kategorií------------------------------
