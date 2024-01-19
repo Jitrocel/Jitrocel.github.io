@@ -19,9 +19,22 @@ function getGETParameters() {
 
   console.log(getGETParameters());
   
+
+
+
+
   
-  
-  
+  function assignParamToA(params, "kategorie") {
+    let A;
+    if (params[paramName]) {
+        A = params[paramName];
+        console.log('Hodnota parametru ' + paramName + ' je ' + A);
+    } else {
+        console.log('Parametr ' + paramName + ' nebyl nalezen.');
+    }
+    return A;
+}
+  console.log(assignParamToA());
   
 //--------------------------------------------------------------------------------
 //---------vyfiltrování datových sad podle kategorií------------------------------
