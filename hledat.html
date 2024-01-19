@@ -1,6 +1,9 @@
 <head>
 <script>
 
+
+
+  
 //--------------------------------------------------------------------------------
 //---------načtení zadaných parametrů--------------------------------------------
 //--------------------------------------------------------------------------------
@@ -14,10 +17,9 @@ let kategorie = url.searchParams.get("kategorie");
 // Vypsání hodnoty parametru "kategorie"
 console.log(kategorie);
 alert(kategorie);
-  
-//--------------------------------------------------------------------------------
-//---------vyfiltrování datových sad podle kategorií------------------------------
-//--------------------------------------------------------------------------------
+
+
+
 
 
 
@@ -32,6 +34,25 @@ alert(kategorie);
                       "KHK_zidov_cirkev.geojson", 
                       "název3.geojson"];
   let filtr_kategorie = kategorie // parametr č2 (kategorie)
+  let filtr_kraj = kraj
+
+//--------------------------------------------------------------------------------
+//---------vyfiltrování datových sad podle kraje------------------------------
+//--------------------------------------------------------------------------------
+
+  j = 0;
+  for (let i = 0; i < geojsonFiles.length; i++) {
+    if (geojsonFiles[i].includes(kraj)) {
+        filtrat[j] = geojsonFiles[i];
+        j++;
+    }
+  }
+  alert("kraj:" + kraj);
+  alert("filtrát po kraji:" + filtrat);
+  
+//--------------------------------------------------------------------------------
+//---------vyfiltrování datových sad podle kategorií------------------------------
+//--------------------------------------------------------------------------------
 
 
 for (let i = 0; i < geojsonFiles.length; i++) {
