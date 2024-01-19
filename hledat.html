@@ -32,11 +32,17 @@ alert(kategorie);
                       "název3.geojson"];
   let filtr_kategorie = kategorie // parametr č2 (kategorie)
 
-  let filtrat = geojsonFiles.filter((fileName) => {
-    return fileName.includes(filtr_kategorie);
-  });
-  console.log(filtr_kategorie);
-  console.log(filtrat);
+
+let filtrat = [];
+let filtr_kategorie = kategorie;
+
+for(let i = 0; i < geojsonFiles.length; i++) {
+    if(geojsonFiles[i].includes(filtr_kategorie)) {
+        filtrat.push(geojsonFiles[i]);
+    }
+}
+
+console.log(filtrat);
 
 
   
