@@ -42,6 +42,7 @@
             let urlParams = new URLSearchParams(window.location.search);
             let kat = urlParams.get('kategorie');
             var files = [kat];
+            alert("par");
         } else {
             var files = ["KHK_arch.geojson", 
                      "KHK_muzea.geojson", 
@@ -52,6 +53,7 @@
                      "KHK_prirodni_zajimavosti.geojson", 
                      "KHK_rozhledny.geojson",
                      "MSK_dum_roku.geojson"];
+            alert("nepar");
         }
 
         
