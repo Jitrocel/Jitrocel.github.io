@@ -1,1 +1,19 @@
+<script>
+  let geojsonFiles = ["
+                      KHK_arch.geojson", 
+                      "KHK_cirkev.geojson", 
+                      "KHK_infocentra.geojson", 
+                      "KHK_muzea.geojson", 
+                      "KHK_pevnosti.geojson", 
+                      "KHK_prirodni_zajimavosti.geojson", 
+                      "KHK_rozhledny.geojson",
+                      "KHK_zidov_cirkev.geojson", 
+                      "název3.geojson"]; // nahraďte svými názvy souborů
+  let filtr_kategorie = "název"; // nahraďte svým filtrem
 
+  let filtrat = geojsonFiles.filter((fileName) => {
+    return fileName.includes(filtr_kategorie);
+  });
+
+  console.log(filtrat);
+</script>
