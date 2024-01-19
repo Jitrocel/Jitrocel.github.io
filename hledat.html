@@ -33,12 +33,10 @@ alert(kategorie);
   let filtr_kategorie = kategorie // parametr č2 (kategorie)
 
 
-let filtrat = [];
-let j = 0;
-for(let i = 0; i < geojsonFiles.length; i++) {
-    if(geojsonFiles[i].includes(filtr_kategorie)) {
-        filtrat[j]=(geojsonFiles[i]);
-        j++;
+for (let i = 0; i < geojsonFiles.length; i++) {
+    if (geojsonFiles[i].includes(kategorie)) {
+        filtrat = geojsonFiles[i];
+        break;
     }
 }
 
