@@ -48,7 +48,7 @@
                         L.marker([lon, lat]).addTo(map);
 
                         // Načtení .geojson souborů
-                        fetch('cesta_k_souboru.geojson')
+                        fetch('KHK_muzea.geojson')
                             .then(response => response.json())
                             .then(data => {
                                 // Procházíme všechny body v .geojson souboru
