@@ -3,15 +3,8 @@
 <head>
     <title>GeoJSON na Tabulku</title>
     <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid black; padding: 8px; text-align: left; }
     </style>
 </head>
 <body>
@@ -28,20 +21,22 @@
     </table>
 
     <script>
+        // Předpokládáme, že máte GeoJSON soubor s názvem "data.geojson"
         fetch('data.geojson')
-        .then(response => response.json())
-        .then(data => {
-            const table = document.getElementById('geojsonTable').getElementsByTagName('tbody')[0];
-            data.features.forEach((feature) => {
-                let row = table.insertRow();
-                let nameCell = row.insertCell(0);
-                let latCell = row.insertCell(1);
-                let lonCell = row.insertCell(2);
-                nameCell.innerHTML = feature.properties.name;
-                latCell.innerHTML = feature.geometry.coordinates[1];
-                lonCell.innerHTML = feature.geometry.coordinates[0];
+            .then(response => response.json())
+            .then(data => {
+                const table = document.getElementById('geojsonTable').getElementsByTagName('tbody')[0];
+                data.features.forEach((feature) => {
+                    const row = table.insertRow();
+                    const nameCell = row.insertCell(0);
+                    const latCell = row.insertCell(1);
+                    const lonCell = row.insertCell(2);
+
+                    nameCell.innerHTML = feature.properties.name;
+                    latCell.innerHTML = feature.geometry.coordinates[1];
+                    lonCell.innerHTML = feature.geometry.coordinates[0];
+                });
             });
-        });
     </script>
 </body>
 </html>
