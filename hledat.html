@@ -69,8 +69,43 @@ for (let i = 0; i < filtrat.length; i++) {
 
 console.log(filtrat_2);
 alert(filtrat);
+//--------------------------------------------------------------------------------
+//---------načtení bodů z odfiltrovaných seznamů do pole--------------------------
+//--------------------------------------------------------------------------------
+  const fs = require('fs');
+
+// Načtěte soubor GeoJSON
+fs.readFile('cesta_k_souboru.geojson', 'utf8', (err, data) => {
+    if (err) {
+        console.error("Nastala chyba při čtení souboru:", err);
+        return;
+    }
+
+    // Převeďte data na objekt JSON
+    const obj = JSON.parse(data);
+
+    // Vytvořte pole pro body
+    let body = [];
+
+    // Projděte všechny prvky v objektu GeoJSON
+    for (let feature of obj.features) {
+        // Přidejte název a polohu do pole
+        body.push({
+            nazev: feature.properties.name,
+            poloha: feature.geometry.coordinates
+        });
+    }
+
+    // Vypište body do tabulky
+    console.table(body);
+});
+
+//--------------------------------------------------------------------------------
+//---------přesměrování na mapu s vyzobrazenými body------------------------------
+//--------------------------------------------------------------------------------
 
 document.write("<meta http-equiv='refresh' content='0;url=mapa.html?kategorie="+filtrat_2+"'>");
+
 
   
 </script>
