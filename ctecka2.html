@@ -41,8 +41,8 @@
                 if (code) {
                     var coords = code.data.match(/"x":\s*(.*),\s*"y":\s*(.*)/);  // předpokládáme, že souřadnice jsou ve formátu "x": , "y":
                     if (coords && coords.length === 3) {
-                        var lon = parseFloat(coords[1]);
-                        var lat = parseFloat(coords[2]);
+                        var lat = parseFloat(coords[1]);
+                        var lon = parseFloat(coords[2]);
                         // Aktualizace mapy
                         map.setView([lon, lat]);
                         L.marker([lon, lat]).addTo(map);
