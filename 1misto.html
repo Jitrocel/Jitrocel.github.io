@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h2>GeoJSON Data</h2>
+    <p id="demo"></p>
+
+    <script>
+        fetch('./data.geojson')
+        .then(response => response.json())
+        .then(data => {
+            let firstFeature = data.features[0];
+            let name = firstFeature.properties.name;
+            let coordinates = firstFeature.geometry.coordinates;
+            document.getElementById("demo").innerHTML = `Název: ${name}, Souřadnice: ${coordinates}`;
+        })
+        .catch(error => console.error('Chyba:', error));
+    </script>
+
+</body>
+</html>
