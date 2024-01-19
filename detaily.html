@@ -19,9 +19,10 @@
                     let featureLat = feature.geometry.coordinates[1];
                     let featureLon = feature.geometry.coordinates[0];
                     // Porovnáváme souřadnice
-                    if (Math.abs(featureLat - misto.lat) < 0.0001 && Math.abs(featureLon - misto.lon) < 0.0001) {
+                    if (Math.abs(featureLon - misto.lon) < 0.0001 && Math.abs(featureLat - misto.lat) < 0.0001) {
                         // Pokud se souřadnice shodují, vypíšeme informace do dokumentu
-                        document.getElementById('info').innerHTML += 'Souřadnice: ' + featureLat + ', ' + featureLon + ', Název bodu: ' + feature.properties.name + '<br>';
+                        document.getElementById('info').innerHTML += 'Souřadnice: ' + featureLon + ', ' + featureLat + ', Název bodu: ' + feature.properties.name + '<br>';
+                    break;
                     }
                     else{
                     alert("chiba");
