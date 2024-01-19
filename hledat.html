@@ -72,36 +72,41 @@ alert(filtrat_2);
 //--------------------------------------------------------------------------------
 //---------načtení bodů z odfiltrovaných seznamů do pole--------------------------
 //--------------------------------------------------------------------------------
-  const fs = require('fs');
+  // Příklad pro Node.js:
+const fs = require('fs');
 
-// Načtěte soubor GeoJSON
-fs.readFile(filtrat_2, 'utf8', (err, data) => {
-    if (err) {
-        console.error("Nastala chyba při čtení souboru:", err);
-        return;
-    }
+// Funkce pro načítání geojson souboru
+function loadGeoJSON(filePath) {
+  try {
+    const fileContent = fs.readFileSync(filePath, 'utf8');
+    const geoJSON = JSON.parse(fileContent);
+    return geoJSON;
+  } catch (error) {
+    console.error('Chyba při čtení geojson souboru:', error.message);
+    return null;
+  }
+}
 
-    // Převeďte data na objekt JSON
-    const obj = JSON.parse(data);
+// Funkce pro extrahování názvů a poloh bodů z geojson
+const geoJSON = loadGeoJSON("KHK_rozhledny.geojson");
+function extractPoints(geoJSON) {
+  const points = [];
 
-    // Vytvořte pole pro body
-    let szn = [];
+  if (geoJSON && geoJSON.features) {
+    geoJSON.features.forEach(feature => {
+      if (feature.geometry && feature.geometry.type === 'Point') {
+        const point = {
+          name: feature.properties && feature.properties.name ? feature.properties.name : '',
+          coordinates: feature.geometry.coordinates
+        };
+        points.push(point);
+      }
+    });
+  }
 
-    // Projděte všechny prvky v objektu GeoJSON
-    for (let feature of obj.features) {
-        // Přidejte název a polohu do pole
-        szn.push({
-            nazev: feature.properties.name,
-            poloha: feature.geometry.coordinates
-        });
-    }
-
-    // Vypište body do tabulky
-    alert(szn)
-    alert("proběhne výpis do tabulky:");
-    console.table(body);
-});
-
+  return points;
+  alert(extractPoints(geoJSON));
+  
 //--------------------------------------------------------------------------------
 //---------přesměrování na mapu s vyzobrazenými body------------------------------
 //--------------------------------------------------------------------------------
