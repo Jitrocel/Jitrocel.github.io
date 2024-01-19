@@ -8,6 +8,8 @@
 <body>
     <div id="mapid" style="height: 600px;"></div>
     <script>
+
+        
         var map = L.map('mapid').setView([50.0755, 14.4378], 8); // Nastavení mapy na Prahu
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -34,7 +36,14 @@
                       "brown",
                       "black"];
         
-        var files = ["KHK_arch.geojson", 
+        let urlHL = new URL(window.location.href);
+        let paramsHL = new URLSearchParams(url.search);
+        if(paramsHL.has('kategorie')) {
+            let urlParams = new URLSearchParams(window.location.search);
+            let kat = urlParams.get('kategorie');
+            var files = [kat];
+        } else {
+            var files = ["KHK_arch.geojson", 
                      "KHK_muzea.geojson", 
                      "KHK_cirkev.geojson", 
                      "KHK_zidov.geojson", 
@@ -43,6 +52,10 @@
                      "KHK_prirodni_zajimavosti.geojson", 
                      "KHK_rozhledny.geojson",
                      "MSK_dum_roku.geojson"];
+        }
+
+        
+        
 
         files.forEach(function(file, index) {
             fetch(file)
