@@ -49,7 +49,7 @@
 
                         // Načtení .geojson souborů
                         fetch("KHK_muzea.geojson")
-                            .then(response => response.geojson())
+                            .then(response => response.json())
                             .then(data => {
                                 // Procházíme všechny body v .geojson souboru
                                 for (let feature of data.features) {
