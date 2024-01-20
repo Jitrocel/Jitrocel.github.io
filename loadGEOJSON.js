@@ -25,7 +25,7 @@
                     nazev = (feature.properties.nazev);
                     x = (coordinates[1]);
                     y = (coordinates[0]);
-                    let crd = [nazev, x, y];
+                    let crd = ("'x':"+x+",'y':"+y);
                     alert(crd);
                     return(crd);
                     
