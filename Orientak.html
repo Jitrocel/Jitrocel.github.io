@@ -10,6 +10,14 @@
 </head>
 <body>
 
+<form id="form">
+  <label for="m">Počet bodů:</label><br>
+  <input type="number" id="m" name="m" min="1"><br>
+  <label for="n">Maximální délka trasy (v metrech):</label><br>
+  <input type="number" id="n" name="n" min="1"><br>
+  <input type="submit" value="Odeslat">
+</form>
+
 <div id="mapid"></div>
 
 <script>
@@ -54,20 +62,23 @@
         return selectedPlaces;
     }
 
-    // Vybere náhodné místo
-    var p = getRandomPlace();
+    document.getElementById("form").addEventListener("submit", function(event){
+        event.preventDefault()
+        const m = document.getElementById("m").value;
+        const n = document.getElementById("n").value;
 
-    // Vybere m náhodných míst v okruhu n od bodu p
-    var n = 30000; // Maximální vzdálenost v metrech
-    var m = 5; // Počet míst
-    var selectedPlaces = getPlacesWithinDistance(p, n, m);
+        // Vybere náhodné místo
+        var p = getRandomPlace();
 
-    // Přidá vybraná místa na mapu
-    for (var i = 0; i < selectedPlaces.length; i++) {
-        var place = selectedPlaces[i];
-        addMarker(place.x, place.y, place.name);
-    
-    }
+        // Vybere m náhodných míst v okruhu n od bodu p
+        var selectedPlaces = getPlacesWithinDistance(p, n, m);
+
+        // Přidá vybraná místa na mapu
+        for (var i = 0; i < selectedPlaces.length; i++) {
+            var place = selectedPlaces[i];
+            addMarker(place.x, place.y, place.name);
+        }
+    });
 </script>
 
 </body>
