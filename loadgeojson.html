@@ -13,7 +13,7 @@
     <thead>
         <tr>
             <th>ID</th>
-            <th>Name</th>
+            <th>nazev___</th>
             <th>Latitude</th>
             <th>Longitude</th>
         </tr>
@@ -51,7 +51,7 @@
                     nazev = (feature.properties.nazev);
                     x = (coordinates[1]);
                     y = (coordinates[0]);
-                    alert(jmeno + " ; " + x + " ; " + y);
+                    alert(nazev + " ; " + x + " ; " + y);
                     idCell.textContent = feature.id;
                     nameCell.textContent = feature.properties.name; // Přidání jména (přizpůsobte podle skutečného názvu vlastnosti)
                     latCell.textContent = coordinates[1];
