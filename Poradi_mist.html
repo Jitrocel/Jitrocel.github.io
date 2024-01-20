@@ -14,7 +14,54 @@
 <div id="map" style="height: 500px;"></div>
 
 <script>
-  // ... (Your existing code)
+ 
+  // Pole s místy ve formátu GeoJSON (atributy x, y a name)
+  // Příklad dat v GeoJSON formátu
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+  var akturl = window.location.href;
+        var urlCasti = akturl.split("?");
+        var kat_sh = urlCasti[1];
+        var katCasti = kat_sh.split("=");
+        var soubor = katCasti[1];
+
+        var geojsonFile = soubor;
+        var bod_nazev = [];
+        var bod_x = [];
+        var bod_y = [];
+        var mta= [];
+
+        fetch(geojsonFile)
+            .then(response => response.json())
+            .then(data => {
+                data.features.forEach(feature => {
+                    var coordinates = feature.geometry.coordinates;
+                    var ks = coordinates[0];
+                    bod_x.push(ks);
+                    var yy = coordinates[1];
+                    bod_y.push(yy);
+                    var name_jm = (feature.properties.nazev);
+                    bod_nazev.push(name_jm);
+                    var brg = {
+                        'x': ks,
+                        'y': yy,
+                        'name': name_jm
+                    };
+                    console.log(brg);
+                    mta.push(brg);
+                });
+
+                console.log(mta);
+
+
+
+
+
+  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+// Funkce pro převod GeoJSON dat do formátu pole places
+
 
   // Funkce pro převod GeoJSON dat do formátu pole places
   function convertToPlaces(mta) {
