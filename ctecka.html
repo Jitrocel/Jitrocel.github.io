@@ -3,6 +3,7 @@
 <head>
     <title>QR Code Reader</title>
     <script src="https://unpkg.com/jsqr"></script>
+    <script src="loadGEOJSON.js"></script>
 </head>
 <body>
     <video id="qr-video" width="300" height="300"></video>
@@ -39,6 +40,15 @@
             }
             requestAnimationFrame(tick);
         }
+
+        loadGEOJSON('KHK_rozhledny.geojson')
+        i = 0;
+        let souradnice = [];
+        while (i<nazev.length){
+            souradnice[i] = (x[1] + y[i]);
+            i++;
+        }
+        alert(souradnice);
     </script>
 </body>
 </html>
