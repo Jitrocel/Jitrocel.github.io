@@ -33,6 +33,17 @@
                 if (code) {
                     // Extracted text from the QR code
                     var extractedText = code.data;
+
+                    // Vstupní souřadnice ve formátu JSON
+                    var souradniceJSON = '{'+extractedText+'}';
+
+                    // Převedení JSON na objekt
+                    var souradniceObjekt = JSON.parse(souradniceJSON);
+
+                    // Extrahování hodnot x a y z objektu
+                    var x_e = souradniceObjekt.x;
+                    var y_e = souradniceObjekt.y;
+                    
                     console.log("Extracted Text:", extractedText);
 
                     // You can now use the 'extractedText' variable as needed.
@@ -57,14 +68,25 @@ fetch(route)
                     let nazev = [];
                     let x = [];
                     let y = [];
-                    var crd = [];
+                    var crd = 0;
+                    var x_p = 0;
+                    var y_p = 0;
                     
                     nazev = (feature.properties.nazev);
                     x = (coordinates[1]);
-                    alert("x: "+ x);
+                    if(x==x_e){
+                        x_p = 1;
+                    }
                     y = (coordinates[0]);
-                    alert("y: "+ y);
-                    crd = ("'x':"+(coordinates[1])+",'y':"+(coordinates[0]));
+                    if(y==y_e){
+                        y_p = 1;
+                    }
+                    
+                    if(x_p+y_p==2){
+                        crd = extractedText;
+                        alert(crd);
+                        break;
+                    }
                 });
 
                 
