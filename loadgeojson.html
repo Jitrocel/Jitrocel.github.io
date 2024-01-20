@@ -36,23 +36,15 @@
                     const geometry = feature.geometry;
                     const coordinates = geometry.coordinates;
 
-                    const row = document.createElement('tr');
-                    const idCell = document.createElement('td');
-                    const latCell = document.createElement('td');
-                    const lonCell = document.createElement('td');
 
                     let jmeno = [];
+                    let x = [];
+                    let y = []
                     jmeno = (feature.properties.nazev);
-                    alert(jmeno);
-                    idCell.textContent = feature.properties.nazev;
-                    latCell.textContent = coordinates[1];
-                    lonCell.textContent = coordinates[0];
-
-                    row.appendChild(idCell);
-                    row.appendChild(latCell);
-                    row.appendChild(lonCell);
-
-                    tableBody.appendChild(row);
+                    x = (coordinates[1];)
+                    y = (coordinates[0];)
+                    alert(jmeno +" ; "+ x+" ; "+ y);
+                    
                 });
             }
 
