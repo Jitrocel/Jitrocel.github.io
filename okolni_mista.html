@@ -25,12 +25,20 @@ let selectedPlace = places[randomIndex];
 // Vzdálenost v km
 let n = 1;
 
+// Haversine vzorec pro výpočet vzdušné vzdálenosti
+function haversineDistance(place1, place2) {
+  let R = 6371; // poloměr Země v km
+  let dLat = (place2.x - place1.x) * Math.PI / 180;
+  let dLon = (place2.y - place1.y) * Math.PI / 180;
+  let a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+          Math.cos(place1.x * Math.PI / 180) * Math.cos(place2.x * Math.PI / 180) *
+          Math.sin(dLon/2) * Math.sin(dLon/2);
+  let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c;
+}
+
 // Filtrujeme místa v okruhu n km
-let nearbyPlaces = places.filter(place => {
-  let dx = place.x - selectedPlace.x;
-  let dy = place.y - selectedPlace.y;
-  return Math.sqrt(dx*dx + dy*dy) <= n;
-});
+let nearbyPlaces = places.filter(place => haversineDistance(selectedPlace, place) <= n);
 
 // Vytvoříme mapu
 let map = L.map('mapid').setView([50, 14], 7);
