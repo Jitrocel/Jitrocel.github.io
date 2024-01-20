@@ -69,9 +69,9 @@ function drawMarkers() {
       .bindPopup(place.name)
       .on('click', () => {
         // Aktualizujeme vybrané místo a vzdálenost n
-        let place = selectedPlace;
+        let selectedPlace = place;
           alert(haversineDistance(selectedPlace, place));
-        n = n - haversineDistance(selectedPlace, place);
+        n -= haversineDistance(selectedPlace, place);
         if (n > 0) {
           drawMarkers();
         }
