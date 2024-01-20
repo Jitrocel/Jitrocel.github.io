@@ -41,7 +41,7 @@ function haversineDistance(place1, place2) {
 let nearbyPlaces = places.filter(place => haversineDistance(selectedPlace, place) <= n);
 
 // Vytvoříme mapu
-let map = L.map('mapid').setView([50, 14], 7);
+let map = L.map('mapid').setView([50, 14], 8);
 
 // Přidáme vrstvu OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
