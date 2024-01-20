@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,7 @@
   <!-- Přidejte odkaz na Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <!-- Volitelně přidejte doplňky nebo ikony Leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.extra-markers.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.extra-markers.min.css" />
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <!-- Volitelně přidejte doplňky nebo ikony Leaflet -->
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.extra-markers.min.js"></script>
@@ -15,145 +16,136 @@
   <script src="https://cdn.jsdelivr.net/npm/tsp-solver@1.1.0/dist/tsp-solver.min.js"></script>
 
 </head>
+
 <body>
 
-<!-- Element pro zobrazení mapy -->
-<div id="map" style="height: 500px;"></div>
+  <!-- Element pro zobrazení mapy -->
+  <div id="map" style="height: 500px;"></div>
 
-<script>
- 
-  // Pole s místy ve formátu GeoJSON (atributy x, y a name)
-  // Příklad dat v GeoJSON formátu
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  <script>
 
-  var akturl = window.location.href;
-        var urlCasti = akturl.split("?");
-        var kat_sh = urlCasti[1];
-        var katCasti = kat_sh.split("=");
-        var soubor = katCasti[1];
+    // Příklad dat v GeoJSON formátu
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-        var geojsonFile = soubor;
+    var akturl = window.location.href;
+    var urlCasti = akturl.split("?");
+    var kat_sh = urlCasti[1];
+    var katCasti = kat_sh.split("=");
+    var soubor = katCasti[1];
+
+    var geojsonFile = soubor;
+    var mta = [];
+
+    fetch(geojsonFile)
+      .then(response => response.json())
+      .then(data => {
         var bod_nazev = [];
         var bod_x = [];
         var bod_y = [];
-        var mta= [];
 
-        fetch(geojsonFile)
-            .then(response => response.json())
-            .then(data => {
-                data.features.forEach(feature => {
-                    var coordinates = feature.geometry.coordinates;
-                    var ks = coordinates[0];
-                    bod_x.push(ks);
-                    var yy = coordinates[1];
-                    bod_y.push(yy);
-                    var name_jm = (feature.properties.nazev);
-                    bod_nazev.push(name_jm);
-                    var brg = {
-                        'y': ks,
-                        'x': yy,
-                        'name': name_jm
-                    };
-                    console.log(brg);
-                    mta.push(brg);
-                });
+        data.features.forEach(feature => {
+          var coordinates = feature.geometry.coordinates;
+          var ks = coordinates[0];
+          bod_x.push(ks);
+          var yy = coordinates[1];
+          bod_y.push(yy);
+          var name_jm = (feature.properties.nazev);
+          bod_nazev.push(name_jm);
+          var brg = {
+            'x': ks,
+            'y': yy,
+            'name': name_jm
+          };
+          console.log(brg);
+          mta.push(brg);
+        });
 
-                console.log(mta);
+        console.log(mta);
 
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+        // Funkce pro převod GeoJSON dat do formátu pole places
+        function convertToPlaces(mta) {
+          var places = [];
 
+          mta.forEach(function (data) {
+            var place = {
+              "type": "Feature",
+              "geometry": {
+                "type": "Point",
+                "coordinates": [data.x, data.y]  // Pozor na obrácený pořadí [x, y]
+              },
+              "properties": {
+                "name": data.name
+              }
+            };
 
+            places.push(place);
+          });
 
-  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-// Funkce pro převod GeoJSON dat do formátu pole places
-
-
-  // Funkce pro převod GeoJSON dat do formátu pole places
-  function convertToPlaces(mta) {
-    var places = [];
-
-    mta.forEach(function (data) {
-      var place = {
-        "type": "Feature",
-        "geometry": {
-          "type": "Point",
-          "coordinates": [data.y, data.x]  // Pozor na obrácený pořadí [y, x]
-        },
-        "properties": {
-          "name": data.name
+          return places;
         }
-      };
 
-      places.push(place);
-    });
+        // Zavolejte funkci pro převod a získání pole places
+        var places = convertToPlaces(mta);
 
-    return places;
-  }
+        console.log(places);
 
-  // Zavolejte funkci pro převod a získání pole places
-  var places = convertToPlaces(mta);
+        //-------------------------------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------------------------------------------
+        //---------------------------------tovření tras------------------------------
+        //-------------------------------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------------------------------------------
 
+        // Náhodně vyber startovní bod
+        var startIndex = Math.floor(Math.random() * places.length);
+        var startPlace = places[startIndex];
 
-console.log(places);
-  //-------------------------------------------------------------------------------------------------------------------------
-  //-------------------------------------------------------------------------------------------------------------------------
-  //-------------------------------------------------------------------------------------------------------------------------
-  //---------------------------------tovření tras------------------------------
-  //-------------------------------------------------------------------------------------------------------------------------
-  //-------------------------------------------------------------------------------------------------------------------------
-  //-------------------------------------------------------------------------------------------------------------------------
+        // Náhodně zamíchejte zbývající body
+        places.splice(startIndex, 1);
+        places.sort(() => Math.random() - 0.5);
 
-  
+        // Vyberte prvních 10 bodů pro trasu
+        var routePlaces = places.slice(0, 10);
 
-// Náhodně vyber startovní bod
-var startIndex = Math.floor(Math.random() * places.length);
-var startPlace = places[startIndex];
+        // Vytvoření mapy Leaflet
+        var mymap = L.map('map').setView([startPlace.geometry.coordinates[0], startPlace.geometry.coordinates[1]], 10);
 
-// Náhodně zamíchejte zbývající body
-places.splice(startIndex, 1);
-places.sort(() => Math.random() - 0.5);
+        // Přidání podkladové mapy (např. OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(mymap);
 
-// Vyberte prvních 10 bodů pro trasu
-var routePlaces = places.slice(0, 10);
+        // Funkce pro vytvoření seznamu souřadnic bodů
+        function getCoordinatesList(points) {
+          return points.map(point => [point.geometry.coordinates[0], point.geometry.coordinates[1]]);
+        }
 
-// Vytvoření mapy Leaflet
-var mymap = L.map('map').setView([startPlace.geometry.coordinates[0], startPlace.geometry.coordinates[1]], 10);
+        // Vykreslení startovního bodu
+        L.marker([startPlace.geometry.coordinates[0], startPlace.geometry.coordinates[1]]).addTo(mymap).bindPopup(startPlace.properties.name);
 
-// Přidání podkladové mapy (např. OpenStreetMap)
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(mymap);
+        // Vykreslení trasy
+        var routeCoordinates = getCoordinatesList([startPlace].concat(routePlaces));
+        var routeMarker = L.polyline(routeCoordinates, { color: 'blue' }).addTo(mymap);
 
-// Funkce pro vytvoření seznamu souřadnic bodů
-function getCoordinatesList(points) {
-  return points.map(point => [point.geometry.coordinates[0], point.geometry.coordinates[1]]);
-}
+        // Řešení TSP pro nalezení nejkratší trasy
+        var tspSolver = new TSPSolver();
+        var tspSolution = tspSolver.solve(getCoordinatesList([startPlace].concat(routePlaces)));
 
-// Vykreslení startovního bodu
-L.marker([startPlace.geometry.coordinates[0], startPlace.geometry.coordinates[1]]).addTo(mymap).bindPopup(startPlace.properties.name);
+        // Seřazení bodů podle pořadí průchodu
+        var orderedPlaces = tspSolution.map(index => index === 0 ? startPlace : routePlaces[index - 1]);
 
-// Vykreslení trasy
-var routeCoordinates = getCoordinatesList([startPlace].concat(routePlaces));
-var routeMarker = L.polyline(routeCoordinates, {color: 'blue'}).addTo(mymap);
+        // Vykreslení trasy podle pořadí průchodu
+        var orderedRouteCoordinates = getCoordinatesList([startPlace].concat(orderedPlaces));
+        var orderedRouteMarker = L.polyline(orderedRouteCoordinates, { color: 'red' }).addTo(mymap);
 
-// Řešení TSP pro nalezení nejkratší trasy
-var tspSolver = new TSPSolver();
-var tspSolution = tspSolver.solve(getCoordinatesList([startPlace].concat(routePlaces)));
+      })
+      .catch(error => console.error('Error fetching GeoJSON:', error));
 
-// Seřazení bodů podle pořadí průchodu
-var orderedPlaces = tspSolution.map(index => index === 0 ? startPlace : routePlaces[index - 1]);
-
-// Vykreslení trasy podle pořadí průchodu
-var orderedRouteCoordinates = getCoordinatesList([startPlace].concat(orderedPlaces));
-var orderedRouteMarker = L.polyline(orderedRouteCoordinates, {color: 'red'}).addTo(mymap);
-
-                  
-                  
-            })         
-                  
-    </script>
+  </script>
 
 </body>
+
 </html>
