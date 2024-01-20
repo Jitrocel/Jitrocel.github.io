@@ -15,29 +15,77 @@
 
 <script>
   // Pole s místy ve formátu GeoJSON (atributy x, y a name)
-  var places = [
-    {
+  // Příklad dat v GeoJSON formátu
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+  var akturl = window.location.href;
+        var urlCasti = akturl.split("?");
+        var kat_sh = urlCasti[1];
+        var katCasti = kat_sh.split("=");
+        var soubor = katCasti[1];
+
+        var geojsonFile = soubor;
+        var bod_nazev = [];
+        var bod_x = [];
+        var bod_y = [];
+        var mta= [];
+
+        fetch(geojsonFile)
+            .then(response => response.json())
+            .then(data => {
+                data.features.forEach(feature => {
+                    var coordinates = feature.geometry.coordinates;
+                    var ks = coordinates[0];
+                    bod_x.push(ks);
+                    var yy = coordinates[1];
+                    bod_y.push(yy);
+                    var name_jm = (feature.properties.nazev);
+                    bod_nazev.push(name_jm);
+                    var brg = {
+                        'x': ks,
+                        'y': yy,
+                        'name': name_jm
+                    };
+                    console.log(brg);
+                    mta.push(brg);
+                });
+
+                console.log(places);
+
+
+
+
+
+  //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+// Funkce pro převod GeoJSON dat do formátu pole places
+function convertToPlaces(mta) {
+  var places = [];
+
+  geojsonData.forEach(function (data) {
+    var place = {
       "type": "Feature",
       "geometry": {
         "type": "Point",
-        "coordinates": [14.42076, 50.08804]  // [x, y]
+        "coordinates": [data.y, data.x]  // Pozor na obrácený pořadí [y, x]
       },
       "properties": {
-        "name": "První místo"
+        "name": data.jmeno
       }
-    },
-    {
-      "type": "Feature",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [14.43784, 50.08747]  // [x, y]
-      },
-      "properties": {
-        "name": "Druhé místo"
-      }
-    },
-    // Přidej další místa podle potřeby
-  ];
+    };
+
+    places.push(place);
+  });
+
+  return places;
+}
+
+// Zavolejte funkci pro převod a získání pole places
+var places = convertToPlaces(geojsonData);
+
+// Výpis výsledného pole places
+console.log(places);
 
   // Vytvoření Leaflet mapy na základě ID elementu
   var map = L.map('map').setView([50.08804, 14.42076], 13);
