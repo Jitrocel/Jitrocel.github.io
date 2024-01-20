@@ -9,7 +9,19 @@
 
 <h2>GeoJSON Table</h2>
 
-
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+        </tr>
+    </thead>
+    <tbody id="geoTableBody">
+        <!-- Table body will be populated dynamically -->
+    </tbody>
+</table>
 
 <script>
     function loadGEOJSON(route){
@@ -24,6 +36,12 @@
                 features.forEach(feature => {
                     const geometry = feature.geometry;
                     const coordinates = geometry.coordinates;
+
+                    const row = document.createElement('tr');
+                    const idCell = document.createElement('td');
+                    const nameCell = document.createElement('td');
+                    const latCell = document.createElement('td');
+                    const lonCell = document.createElement('td');
 
 
                     let jmeno = [];
