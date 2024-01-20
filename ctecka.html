@@ -9,54 +9,31 @@
   <script src="https://cdn.jsdelivr.net/npm/jsqr@1.0.0/dist/jsQR.js"></script>
   <script>
    
-// Načtěte QR kód a získejte jeho obsah
-function readQRCode() {
-  // Váš kód pro načtení QR kódu z kamery nebo obrázku
-  // ...
+// Předpokládáme, že používáte prohlížeč
 
-  // Předpokládáme, že je proměnná s obsahem QR kódu pojmenována 'qrCodeContent'
-  var qrCodeContent = "ObsahQRKodu";
+// Náš cílový soubor s GeoJSON daty
+var geojsonFile = 'KHK_rozhledny.geojson';
 
-  return qrCodeContent;
-}
+// Fetch pro načtení dat ze souboru
+fetch(geojsonFile)
+  .then(response => response.json())
+  .then(data => {
+    // Získáme souřadnice
+    var coordinates = data.features[0].geometry.coordinates;
 
-// Načtěte soubor GeoJSON
-function readGeoJSONFile() {
-  // Váš kód pro načtení souboru GeoJSON
-  // ...
+    // Přiřadíme souřadnice do proměnných x a y
+    var x = coordinates[0];
+    var y = coordinates[1];
 
-  // Předpokládáme, že je proměnná s obsahem GeoJSON pojmenována 'geojsonContent'
-  var geojsonContent = {
-    "type": "FeatureCollection",
-    "features": [
-      // ... GeoJSON obsah
-    ]
-  };
+    // Získáme jméno
+    var name = data.features[0].properties.name;
 
-  return geojsonContent;
-}
-
-// Porovnejte obsah QR kódu se souřadnicemi v GeoJSON
-function compareQRCodeWithGeoJSON(qrCodeContent, geojsonContent) {
-  // Předpokládáme, že QR kód obsahuje souřadnice ve vhodném formátu, např. "lat,lng"
-  // Předpokládáme také, že GeoJSON obsahuje souřadnice ve vhodném formátu
-
-  // Zde provedete porovnání obsahu QR kódu se souřadnicemi v GeoJSON
-  // ...
-
-  // Například:
-  if (qrCodeContent === geojsonContent.features[0].geometry.coordinates.toString()) {
-    alert("Úspěch");
-    souradnice = qrCodeContent;
-  }
-}
-
-// Spustíme proces načítání QR kódu a GeoJSON souboru a jejich porovnání
-var qrCodeContent = readQRCode();
-var geojsonContent = readGeoJSONFile();
-var souradnice;
-
-compareQRCodeWithGeoJSON(qrCodeContent, geojsonContent);
+    // Výstup
+    console.log("x:", x);
+    console.log("y:", y);
+    console.log("Jméno:", name);
+  })
+  .catch(error => console.error('Chyba při načítání souboru:', error));
   </script>
 </body>
 </html>
