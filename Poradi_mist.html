@@ -8,12 +8,64 @@
 <body>
     <div id="map" style="height: 600px;"></div>
     <script>
-        // Předpokládaný formát databáze míst
-        var places = [
-            {x: 50.0755, y: 14.4378, name: 'Praha'},
-            {x: 49.1922, y: 16.6113, name: 'Brno'},
-            // další místa...
-        ];
+        // **********************************************************************************
+
+        var akturl = window.location.href;
+// Rozdělí obsah proměnné "akturl" znakem "?"
+var urlCasti = akturl.split("?");
+// Druhou část vloží do proměnné "kat_sh"
+var kat_sh = urlCasti[1];
+// Rozdělí proměnnou "kat_sh" znakem "="
+var katCasti = kat_sh.split("=");
+// Druhou část uloží do proměnné "kategorie"
+var soubor = katCasti[1];
+
+        
+var geojsonFile = soubor;
+
+var bod_nazev = [];
+var bod_x = [];
+var bod_y = [];
+var places = [];
+  
+// Fetch pro načtení dat ze souboru
+fetch(geojsonFile)
+  .then(response => response.json())
+  .then(data => {
+    // Iterujeme přes všechny prvky (features) v GeoJSON dat
+    data.features.forEach(feature => {
+      // Získáme souřadnice
+      var coordinates = feature.geometry.coordinates;
+
+
+      
+      // Přiřadíme souřadnice do proměnných x a y
+      var x = coordinates[0];
+      bod_x.push(x);
+      
+      var y = coordinates[1];
+      bod_y.push(y);
+      // Získáme jméno
+      var name = (feature.properties.nazev);
+      bod_nazev.push(name);
+
+
+      places.push("{x: "+bod_x+", y: "+bod_y+", name: '"+bod_nazev+"'}");
+      // Výstup pro každý prvek
+      //console.log("x:", x);
+      //console.log("y:", y);
+      //console.log("Název:", name);
+      //console.log("------------------");
+    });
+  })
+  .catch(error => console.error('Chyba při načítání souboru:', error));
+
+  
+  console.log(bod_x);
+  console.log(bod_y);
+  console.log(bod_nazev);
+        //***********************************************************************************
+        
 
         // Vytvoření mapy
         var map = L.map('map').setView([50.0755, 14.4378], 13);
