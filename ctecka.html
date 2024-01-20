@@ -33,7 +33,7 @@
           const code = jsQR(imageData.data, canvas.width, canvas.height);
 
           if (code) {
-            console.log('QR Code detected:', code.data);
+            console.log(code.data);
             // Zde můžete provést další akce s nalezeným QR kódem
           }
         }, 100); // Kontroluje QR kódy každou sekundu (změňte podle potřeby)
