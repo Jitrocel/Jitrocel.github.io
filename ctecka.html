@@ -35,10 +35,60 @@
           if (code) {
             console.log(code.data);
             // Zde můžete provést další akce s nalezeným QR kódem
+            //************************************************************************************
+// Náš cílový soubor s GeoJSON daty
+var geojsonFile = 'KHK_rozhledny.geojson';
+
+// Fetch pro načtení dat ze souboru
+fetch(geojsonFile)
+  .then(response => response.json())
+  .then(data => {
+    // Iterujeme přes všechny prvky (features) v GeoJSON dat
+    data.features.forEach(feature => {
+      // Získáme souřadnice
+      var coordinates = feature.geometry.coordinates;
+
+      // Přiřadíme souřadnice do proměnných x a y
+      var x = coordinates[0];
+      var y = coordinates[1];
+
+      // Získáme jméno
+      var name = feature.properties.nazev;
+      
+      let p_kod = ("'x':"+x+" ,'y':"+y) ;
+      if(p_kod==code.data){
+        var nactena_poloha = name;
+        alert("načteno: "+nactena_poloha);  
+      
+      }
+      
+      
+
+      // Výstup pro každý prvek
+      console.log("x:", x);
+      console.log("y:", y);
+      console.log("Název:", name);
+      console.log("-------------------");
+    });
+  })
+  .catch(error => console.error('Chyba při načítání souboru:', error));
+            //************************************************************************************
           }
         }, 100); // Kontroluje QR kódy každou sekundu (změňte podle potřeby)
       });
     });
+
+
+    //--------------------------------------
+    //--------------------------------------------------------------------
+    //_---------------------------------------------------------------
+
+
+     //------------------------------------------------
+    //-----------------načítání a porovnávání---------------------------------
+    //------------------------------------------------
+   
+
   </script>
 </body>
 </html>
