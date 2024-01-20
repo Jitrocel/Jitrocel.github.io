@@ -48,6 +48,9 @@
         // Porovnání s GeoJSON souřadnicemi
         const foundFeature = geojsonData.features.find(feature => feature.properties.qrCode === qrCode);
 
+        alert(qrCode);
+        alert()
+        
         if (foundFeature) {
           alert('úspěch');
           const souradnice = foundFeature.geometry.coordinates;
