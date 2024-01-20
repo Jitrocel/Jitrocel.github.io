@@ -46,7 +46,7 @@
         stream.getTracks().forEach(track => track.stop());
 
         // Porovnání s GeoJSON souřadnicemi
-        const foundFeature = geojsonData.features.find(feature => feature.properties.qrCode === qrCode);
+        const foundFeature = geojsonData.features.find(feature => feature.properties.coordinates === qrCode);
 
         alert(qrCode);
         alert()
