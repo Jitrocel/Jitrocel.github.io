@@ -27,6 +27,7 @@
         }
         input#m{
             width:90%;
+            height:10rem;;
             font-size:5rem;
             text-align:center;
             background-color:#080030;
@@ -34,6 +35,15 @@
             border-bottom-style:solid;
             border-bottom-color:#460040;
 
+        }
+        input#ods{
+            width:20%;
+            height:10rem;;
+            font-size:5rem;
+            text-align:center;
+            background-color:orange;
+            border-style:solid;
+            border-color:orange;
         }
         ::placeholder{
             color:white;
@@ -50,7 +60,7 @@
   <input type="number" id="m" name="m" min="1" placeholder="počet kontrol"><br>
   <label for="n">Maximální délka trasy (v metrech):</label><br>
   <input type="number" id="n" name="n" min="1" placeholder="maximální délka"><br>
-  <input type="submit" value="Odeslat">
+  <input type="submit" id="ods" value="Odeslat">
 </form>
 
 <div id="mapid"></div>
