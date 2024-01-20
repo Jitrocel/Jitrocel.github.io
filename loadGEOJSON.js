@@ -26,6 +26,7 @@
                     x = (coordinates[1]);
                     y = (coordinates[0]);
                     let crd = [nazev, x, y];
+                    alert(crd);
                     return(crd);
                     
                     //idCell.textContent = feature.id;
