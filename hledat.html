@@ -73,6 +73,38 @@ alert(filtrat_2);
 //---------načtení bodů z odfiltrovaných seznamů do pole--------------------------
 //--------------------------------------------------------------------------------
 
+var geojsonFile = filtrat_2;
+
+// Fetch pro načtení dat ze souboru
+fetch(geojsonFile)
+  .then(response => response.json())
+  .then(data => {
+    // Iterujeme přes všechny prvky (features) v GeoJSON dat
+    data.features.forEach(feature => {
+      // Získáme souřadnice
+      var coordinates = feature.geometry.coordinates;
+
+      // Přiřadíme souřadnice do proměnných x a y
+      var x = coordinates[0];
+      var y = coordinates[1];
+      // Získáme jméno
+      var name = feature.properties.nazev;
+      
+       
+      
+      }
+      
+      
+
+      // Výstup pro každý prvek
+      console.log("x:", x);
+      console.log("y:", y);
+      console.log("Název:", name);
+      console.log("-------------------");
+    });
+  })
+  .catch(error => console.error('Chyba při načítání souboru:', error));
+  
 //--------------------------------------------------------------------------------
 //---------přesměrování na mapu s vyzobrazenými body------------------------------
 //--------------------------------------------------------------------------------
