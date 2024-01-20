@@ -43,11 +43,14 @@
                     drawLine(code.location.topRightCorner, code.location.bottomRightCorner, "#FF3B58");
                     drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, "#FF3B58");
                     drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, "#FF3B58");
-                    console.log(code.data);
                     var coordinates = code.data.split(',');
-                    var lon = coordinates[0];
-                    var lat = coordinates[1];
-                    alert('Longitude: ' + lon + ', Latitude: ' + lat);
+                    if (coordinates.length == 2) {
+                        var lon = coordinates[0];
+                        var lat = coordinates[1];
+                        alert('Longitude: ' + lon + ', Latitude: ' + lat);
+                    } else {
+                        alert('Data v QR kódu nejsou ve formátu lon,lat');
+                    }
                 }
             }
             requestAnimationFrame(tick);
