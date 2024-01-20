@@ -3,10 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leaflet Map with GeoJSON Points</title>
-  <!-- Vložení Leaflet knihovny -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <title>Leaflet Map</title>
+  <!-- Přidejte odkaz na Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" integrity="sha512-qZ8TT6vNY0tBAldicLwAR/XFq6/QqV5bCxwS6J6kpaKrkRQIJE5H/t1Ri5/Y4Z6y7k3G3OU9RQjhIS+r5R17i1g==" crossorigin=""/>
+  <!-- Volitelně přidejte doplňky nebo ikony Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.extra-markers.min.css" integrity="sha512-4l4Yg/CZNoU+nddEzm95Dj0qiqXkFwZhVNUYzfQ9hUVW+Ax2q2o7L3fm8quwwLPH2C4T9o4FUof6L2KgmNOOx/w==" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js" integrity="sha512-IHRUpeIzNFT+F4MVS+FM1s6JSVttc32bl6r0I9o+6qWud3JTRaRglgAxVYKusxO9tTNCpCY9/5Q0SvN8qo9txw==" crossorigin=""></script>
+  <!-- Volitelně přidejte doplňky nebo ikony Leaflet -->
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.extra-markers.min.js" integrity="sha512-O7+JZK1h6euOzPIr1Q27v9fG3iBp0lfL2vvb8o3KNSAdxS4DH2leTep3gW0f3pFfMY6qCnwJyQrMPwQ/zkUdpA==" crossorigin=""></script>
+  <!-- Přidejte odkaz na knihovnu pro řešení TSP -->
+  <script src="https://cdn.jsdelivr.net/npm/tsp-solver@1.1.0/dist/tsp-solver.min.js"></script>
+
 </head>
 <body>
 
@@ -99,6 +106,7 @@ console.log(places);
   //-------------------------------------------------------------------------------------------------------------------------
 
   
+
 // Náhodně vyber startovní bod
 var startIndex = Math.floor(Math.random() * places.length);
 var startPlace = places[startIndex];
@@ -118,19 +126,29 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(mymap);
 
+// Funkce pro vytvoření seznamu souřadnic bodů
+function getCoordinatesList(points) {
+  return points.map(point => [point.geometry.coordinates[0], point.geometry.coordinates[1]]);
+}
+
 // Vykreslení startovního bodu
 L.marker([startPlace.geometry.coordinates[0], startPlace.geometry.coordinates[1]]).addTo(mymap).bindPopup(startPlace.properties.name);
 
 // Vykreslení trasy
-var routeCoordinates = [startPlace.geometry.coordinates];
-routePlaces.forEach(place => {
-  routeCoordinates.push(place.geometry.coordinates);
-  L.marker([place.geometry.coordinates[0], place.geometry.coordinates[1]]).addTo(mymap).bindPopup(place.properties.name);
-});
+var routeCoordinates = getCoordinatesList([startPlace].concat(routePlaces));
+var routeMarker = L.polyline(routeCoordinates, {color: 'blue'}).addTo(mymap);
 
-var polyline = L.polyline(routeCoordinates, {color: 'blue'}).addTo(mymap);
+// Řešení TSP pro nalezení nejkratší trasy
+var tspSolver = new TSPSolver();
+var tspSolution = tspSolver.solve(getCoordinatesList([startPlace].concat(routePlaces)));
 
-                  
+// Seřazení bodů podle pořadí průchodu
+var orderedPlaces = tspSolution.map(index => index === 0 ? startPlace : routePlaces[index - 1]);
+
+// Vykreslení trasy podle pořadí průchodu
+var orderedRouteCoordinates = getCoordinatesList([startPlace].concat(orderedPlaces));
+var orderedRouteMarker = L.polyline(orderedRouteCoordinates, {color: 'red'}).addTo(mymap);
+
                   
                   
             })         
