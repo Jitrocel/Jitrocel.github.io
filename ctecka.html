@@ -62,8 +62,16 @@ fetch(route)
                     x = (coordinates[1]);
                     y = (coordinates[0]);
                     var crd = ("'x':"+x+",'y':"+y);
-                    alert(crd);
                 });
+
+                let k = 0;
+                while(k<crd.lenght){
+                    if(crd==extractedText){
+                        console.log(crd);
+                        console.log("-");
+                    }
+                    k++;
+                }
             }
             // Získání seznamu prvků (bodů) z GeoJSON dat
             const features = data.features;
@@ -76,17 +84,8 @@ fetch(route)
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
-while(1==1){
-    let k = 0;
-    while(k<crd.lenght){
-        if(crd==extractedText){
-            console.log(crd);
-            console.log("-");
-        }
-        k++;
-    }
+
     
-}
         
         
     </script>
