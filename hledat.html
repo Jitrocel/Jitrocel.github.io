@@ -84,11 +84,24 @@ fetch(geojsonFile)
       // Získáme souřadnice
       var coordinates = feature.geometry.coordinates;
 
+
+      var bod_nazev = [];
+      var bod_x = [];
+      var bod_y = [];
       // Přiřadíme souřadnice do proměnných x a y
       var x = coordinates[0];
+      bod_x.push(x);
+      
       var y = coordinates[1];
+      bod_y.push(y);
       // Získáme jméno
       var name = (feature.properties.nazev);
+      bod_nazev.push(name);
+      console.log(bod_nazev);
+
+      
+      
+
       
        
       
@@ -109,7 +122,7 @@ fetch(geojsonFile)
 //---------přesměrování na mapu s vyzobrazenými body------------------------------
 //--------------------------------------------------------------------------------
 
-document.write("<meta http-equiv='refresh' content='7;url=mapa.html?kategorie="+filtrat_2+"'>");
+//document.write("<meta http-equiv='refresh' content='7;url=mapa.html?kategorie="+filtrat_2+"'>");
 
 
 
