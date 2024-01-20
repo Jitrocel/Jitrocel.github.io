@@ -6,7 +6,7 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
-<form id="form">
+<form id="form" action="">
    <label for="n">Maximální délka trasy (v kilometrech):</label><br>
   <input type="number" id="n" name="n" min="1"><br>
   <input type="submit" value="Odeslat">
@@ -32,9 +32,14 @@ let places = [
 
 // Náhodně vybrané místo
 let selectedPlace = places[Math.floor(Math.random() * places.length)];
-
+var akturl = window.location.href;
+var urlCasti = akturl.split("?");
+var kat_sh = urlCasti[1];
+var katCasti = kat_sh.split("=");
+var kategorie = katCasti[1];
+console.log(kategorie);
 // Vzdálenost v km
-let n = 30;
+let n = kategorie;
 
 // Haversine vzorec pro výpočet vzdušné vzdálenosti
 function haversineDistance(place1, place2) {
