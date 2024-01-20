@@ -8,62 +8,55 @@
 <body>
   <script src="https://cdn.jsdelivr.net/npm/jsqr@1.0.0/dist/jsQR.js"></script>
   <script>
-    async function readQRCode() {
-      try {
-        const video = document.createElement('video');
-        const constraints = { video: true };
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        video.srcObject = stream;
+   
+// Načtěte QR kód a získejte jeho obsah
+function readQRCode() {
+  // Váš kód pro načtení QR kódu z kamery nebo obrázku
+  // ...
 
-        await video.play();
+  // Předpokládáme, že je proměnná s obsahem QR kódu pojmenována 'qrCodeContent'
+  var qrCodeContent = "ObsahQRKodu";
 
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
+  return qrCodeContent;
+}
 
-        const geojsonURL = 'KHK_rozhledny.geojson'; // Změňte na odpovídající cestu ke svému souboru GeoJSON
+// Načtěte soubor GeoJSON
+function readGeoJSONFile() {
+  // Váš kód pro načtení souboru GeoJSON
+  // ...
 
-        const response = await fetch(geojsonURL);
-        const geojsonData = await response.json();
+  // Předpokládáme, že je proměnná s obsahem GeoJSON pojmenována 'geojsonContent'
+  var geojsonContent = {
+    "type": "FeatureCollection",
+    "features": [
+      // ... GeoJSON obsah
+    ]
+  };
 
-        const qrCode = await new Promise((resolve) => {
-          const onFrame = () => {
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-            const code = jsQR(imageData.data, imageData.width, imageData.height);
+  return geojsonContent;
+}
 
-            if (code) {
-              resolve(code.data);
-            } else {
-              requestAnimationFrame(onFrame);
-            }
-          };
+// Porovnejte obsah QR kódu se souřadnicemi v GeoJSON
+function compareQRCodeWithGeoJSON(qrCodeContent, geojsonContent) {
+  // Předpokládáme, že QR kód obsahuje souřadnice ve vhodném formátu, např. "lat,lng"
+  // Předpokládáme také, že GeoJSON obsahuje souřadnice ve vhodném formátu
 
-          onFrame();
-        });
+  // Zde provedete porovnání obsahu QR kódu se souřadnicemi v GeoJSON
+  // ...
 
-        stream.getTracks().forEach(track => track.stop());
+  // Například:
+  if (qrCodeContent === geojsonContent.features[0].geometry.coordinates.toString()) {
+    alert("Úspěch");
+    souradnice = qrCodeContent;
+  }
+}
 
-        // Porovnání s GeoJSON souřadnicemi
-        const foundFeature = geojsonData.features.find(feature => feature.properties.coordinates === qrCode);
+// Spustíme proces načítání QR kódu a GeoJSON souboru a jejich porovnání
+var qrCodeContent = readQRCode();
+var geojsonContent = readGeoJSONFile();
+var souradnice;
 
-        alert(qrCode);
-        alert()
-        
-        if (foundFeature) {
-          alert('úspěch');
-          const souradnice = foundFeature.geometry.coordinates;
-          console.log('Souradnice:', souradnice);
-        } else {
-          alert('QR kód nebyl nalezen v GeoJSON souboru.');
-        }
-      } catch (error) {
-        console.error('Chyba:', error);
-      }
-    }
-
-    readQRCode();
+compareQRCodeWithGeoJSON(qrCodeContent, geojsonContent);
   </script>
 </body>
 </html>
