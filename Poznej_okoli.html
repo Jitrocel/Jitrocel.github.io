@@ -76,6 +76,7 @@ function drawMarkers() {
         // Aktualizujeme vzdálenost n
         let distance = haversineDistance(selectedPlace, place);
         n -= distance;
+          alert(distance);
         if (n > 0) {
           // Aktualizujeme vybrané místo
           selectedPlace = place;
