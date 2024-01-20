@@ -5,31 +5,52 @@
 </head>
 <body>
     <video id="preview" style="width: 100%; max-width: 600px;" autoplay></video>
+    <canvas id="canvas" style="display: none;"></canvas>
     <script>
         var video = document.getElementById('preview');
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
-                video.srcObject = stream;
-                video.play();
-                scanQRCode();
-            });
+        var canvasElement = document.getElementById('canvas');
+        var canvas = canvasElement.getContext('2d');
+
+        function drawLine(begin, end, color) {
+            canvas.beginPath();
+            canvas.moveTo(begin.x, begin.y);
+            canvas.lineTo(end.x, end.y);
+            canvas.lineWidth = 4;
+            canvas.strokeStyle = color;
+            canvas.stroke();
         }
 
-        function scanQRCode() {
-            var canvas = document.createElement('canvas');
-            var context = canvas.getContext('2d');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-            var code = jsQR(imageData.data, imageData.width, imageData.height);
-            if (code) {
-                var coordinates = code.data.split(',');
-                var lon = coordinates[0];
-                var lat = coordinates[1];
-                alert('Longitude: ' + lon + ', Latitude: ' + lat);
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
+            video.srcObject = stream;
+            video.setAttribute("playsinline", true);
+            video.play();
+            requestAnimationFrame(tick);
+        });
+
+        function tick() {
+            if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                canvasElement.hidden = false;
+
+                canvasElement.height = video.videoHeight;
+                canvasElement.width = video.videoWidth;
+                canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+                var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+                var code = jsQR(imageData.data, imageData.width, imageData.height, {
+                    inversionAttempts: "dontInvert",
+                });
+                if (code) {
+                    drawLine(code.location.topLeftCorner, code.location.topRightCorner, "#FF3B58");
+                    drawLine(code.location.topRightCorner, code.location.bottomRightCorner, "#FF3B58");
+                    drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, "#FF3B58");
+                    drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, "#FF3B58");
+                    console.log(code.data);
+                    var coordinates = code.data.split(',');
+                    var lon = coordinates[0];
+                    var lat = coordinates[1];
+                    alert('Longitude: ' + lon + ', Latitude: ' + lat);
+                }
             }
-            requestAnimationFrame(scanQRCode);
+            requestAnimationFrame(tick);
         }
     </script>
 </body>
