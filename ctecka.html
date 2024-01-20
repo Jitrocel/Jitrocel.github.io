@@ -1,41 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR Code Reader</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Reader</title>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.0.1/dist/jsQR.js"></script>
 </head>
 <body>
-  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.0.0/dist/jsQR.js"></script>
-  <script>
-   
-// Náš cílový soubor s GeoJSON daty
-var geojsonFile = 'KHK_rozhledny.geojson';
+    <video id="video" width="640" height="480" autoplay></video>
+    <canvas id="canvas" width="640" height="480"></canvas>
 
-// Fetch pro načtení dat ze souboru
-fetch(geojsonFile)
-  .then(response => response.json())
-  .then(data => {
-    // Iterujeme přes všechny prvky (features) v GeoJSON dat
-    data.features.forEach(feature => {
-      // Získáme souřadnice
-      var coordinates = feature.geometry.coordinates;
+    <script>
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                const video = document.getElementById('video');
+                video.srcObject = stream;
 
-      // Přiřadíme souřadnice do proměnných x a y
-      var x = coordinates[0];
-      var y = coordinates[1];
+                video.onloadedmetadata = () => {
+                    video.play();
+                    const canvas = document.getElementById('canvas');
+                    const context = canvas.getContext('2d');
 
-      // Získáme jméno
-      var name = feature.properties.nazev;
+                    const scanQRCode = () => {
+                        context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-      // Výstup pro každý prvek
-      console.log("x:", x);
-      console.log("y:", y);
-      console.log("Název:", name);
-      console.log("-------------------");
-    });
-  })
-  .catch(error => console.error('Chyba při načítání souboru:', error));
-  </script>
+                        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                        const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+                        if (code) {
+                            console.log('QR Code detected:', code.data);
+                        }
+
+                        requestAnimationFrame(scanQRCode);
+                    };
+
+                    scanQRCode();
+                };
+            })
+            .catch(error => {
+                console.error('Error accessing camera:', error);
+            });
+    </script>
 </body>
 </html>
