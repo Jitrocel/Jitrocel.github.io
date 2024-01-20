@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<h2>GeoJSON Table</h2>
+<!--<h2>GeoJSON Table</h2>
 
 <table border="1">
     <thead>
@@ -19,9 +19,10 @@
         </tr>
     </thead>
     <tbody id="geoTableBody">
-        <!-- Table body will be populated dynamically -->
+         Table body will be populated dynamically 
     </tbody>
 </table>
+    !-->
 
 <script>
     // Načtení GeoJSON souboru (předpokládá se, že je umístěn ve stejném adresáři jako HTML soubor)
@@ -31,7 +32,7 @@
         .then(data => {
             // Funkce pro vložení dat do tabulky
             function populateTable(features) {
-                const tableBody = document.getElementById('geoTableBody');
+                //const tableBody = document.getElementById('geoTableBody');
 
                 features.forEach(feature => {
                     const geometry = feature.geometry;
