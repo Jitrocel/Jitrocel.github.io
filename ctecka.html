@@ -41,8 +41,43 @@
             requestAnimationFrame(tick);
         }
 
-        let lgs = loadGEOJSON('/KHK_rozhledny.geojson');
-        console.log(lgs);
+//--------------------------------------------------------------------------
+//---------------------načtení dat z souboru geojson------------------------
+//--------------------------------------------------------------------------
+let route = "/KHK_rozhledny.geojson";
+fetch(route)
+        .then(response => response.json())
+        .then(data => {
+            function populateTable(features) {
+
+                features.forEach(feature => {
+                    const geometry = feature.geometry;
+                    const coordinates = geometry.coordinates;
+
+                    let nazev = [];
+                    alert(nazev);
+                    let x = [];
+                    let y = [];
+                    
+                    nazev = (feature.properties.nazev);
+                    x = (coordinates[1]);
+                    y = (coordinates[0]);
+                    let crd = ("'x':"+x+",'y':"+y);
+                    alert(crd);
+                });
+            }
+            // Získání seznamu prvků (bodů) z GeoJSON dat
+            const features = data.features;
+            // Volání funkce pro vložení dat do tabulky
+            populateTable(features);
+        })
+        .catch(error => console.error('Error loading GeoJSON:', error)); 
+
+
+//--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+        
         
     </script>
 </body>
