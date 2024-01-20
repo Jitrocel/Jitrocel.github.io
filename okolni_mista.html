@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Náhodné místo</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body>
+
+<div id="mapid" style="height: 600px;"></div>
+
+<script>
+// Seznam míst
+let places = [
+  {x: 50.0755, y: 14.4378, name: 'Praha'},
+  // další místa...
+];
+
+// Náhodně vybrané místo
+let randomIndex = Math.floor(Math.random() * places.length);
+let selectedPlace = places[randomIndex];
+
+// Vzdálenost v km
+let n = 10;
+
+// Filtrujeme místa v okruhu n km
+let nearbyPlaces = places.filter(place => {
+  let dx = place.x - selectedPlace.x;
+  let dy = place.y - selectedPlace.y;
+  return Math.sqrt(dx*dx + dy*dy) <= n;
+});
+
+// Vytvoříme mapu
+let map = L.map('mapid').setView([selectedPlace.x, selectedPlace.y], 13);
+
+// Přidáme vrstvu OpenStreetMap
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+// Přidáme body na mapu
+nearbyPlaces.forEach(place => {
+  L.marker([place.x, place.y]).addTo(map)
+    .bindPopup(place.name)
+    .openPopup();
+});
+</script>
+
+</body>
+</html>
