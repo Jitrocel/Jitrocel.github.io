@@ -12,18 +12,24 @@
 <script>
 // Seznam míst
 let places = [
-  {x: 50.0755, y: 14.4378, name: 'Praha'},
-  {x: 50.5, y: 14.9, name: 'Kosmonosy'},
-  {x: 50.8, y: 15, name: 'Liberec'},
+  {x: 50.0765, y: 14.4378, name: 'Praha'},
+  {x: 50.0775, y: 14.4478, name: 'Brno'},
+  {x: 50.0785, y: 14.4578, name: 'Plzeň'},
+  {x: 50.0795, y: 14.4678, name: 'Ústí'},
+  {x: 50.0805, y: 14.4778, name: 'Přerov'},
+  {x: 50.0815, y: 14.4878, name: 'Harrachov'},
+  {x: 50.0825, y: 14.4978, name: 'Tanvald'},
+  {x: 50.0835, y: 14.5078, name: 'Chomutov'},
+  {x: 50.0845, y: 14.5178, name: 'Most'},
+  {x: 50.0855, y: 14.5278, name: 'Orlová'},
   // další místa...
 ];
 
 // Náhodně vybrané místo
-let randomIndex = Math.floor(Math.random() * places.length);
-let selectedPlace = places[randomIndex];
+let selectedPlace = places[Math.floor(Math.random() * places.length)];
 
 // Vzdálenost v km
-let n = 70;
+let n = 50;
 
 // Haversine vzorec pro výpočet vzdušné vzdálenosti
 function haversineDistance(place1, place2) {
@@ -37,23 +43,44 @@ function haversineDistance(place1, place2) {
   return R * c;
 }
 
-// Filtrujeme místa v okruhu n km
-let nearbyPlaces = places.filter(place => haversineDistance(selectedPlace, place) <= n);
-
 // Vytvoříme mapu
-let map = L.map('mapid').setView([50, 14], 7);
+let map = L.map('mapid').setView([50, 15], 8);
 
 // Přidáme vrstvu OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
-// Přidáme body na mapu
-nearbyPlaces.forEach(place => {
-  L.marker([place.x, place.y]).addTo(map)
-    .bindPopup(place.name)
-    .openPopup();
-});
+// Funkce pro vykreslení bodů
+function drawMarkers() {
+  // Odstraníme všechny existující markery
+  map.eachLayer(layer => {
+    if (layer instanceof L.Marker) {
+      map.removeLayer(layer);
+    }
+  });
+
+  // Filtrujeme místa v okruhu n km
+  let nearbyPlaces = places.filter(place => haversineDistance(selectedPlace, place) <= n);
+
+  // Přidáme body na mapu
+  nearbyPlaces.forEach(place => {
+    L.marker([place.x, place.y]).addTo(map)
+      .bindPopup(place.name)
+      .on('click', () => {
+        // Aktualizujeme vybrané místo a vzdálenost n
+        selectedPlace = place;
+        n -= haversineDistance(selectedPlace, place);
+        if (n > 0) {
+          drawMarkers();
+        }
+      })
+      .openPopup();
+  });
+}
+
+// Vykreslíme počáteční body
+drawMarkers();
 </script>
 
 </body>
