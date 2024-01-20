@@ -25,7 +25,8 @@
 
 <script>
     // Načtení GeoJSON souboru (předpokládá se, že je umístěn ve stejném adresáři jako HTML soubor)
-    fetch('your_geojson_file.geojson')
+    function loadGEOJSON(route){
+    fetch(route)
         .then(response => response.json())
         .then(data => {
             // Funkce pro vložení dat do tabulky
@@ -42,6 +43,15 @@
                     const latCell = document.createElement('td');
                     const lonCell = document.createElement('td');
 
+
+                    let jmeno = [];
+                    let x = [];
+                    let y = [];
+
+                    jmeno = (feature.properties.name);
+                    x = (coordinates[1]);
+                    y = (coordinates[0]);
+                    alert(jmeno + " ; " + x + " ; " + y);
                     idCell.textContent = feature.id;
                     nameCell.textContent = feature.properties.name; // Přidání jména (přizpůsobte podle skutečného názvu vlastnosti)
                     latCell.textContent = coordinates[1];
@@ -63,6 +73,8 @@
             populateTable(features);
         })
         .catch(error => console.error('Error loading GeoJSON:', error));
+    }
+    loadGEOJSON('KHK_rozhledny.geojson');
 </script>
 
 </body>
