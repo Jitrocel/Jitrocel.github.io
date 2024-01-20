@@ -1,111 +1,66 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>QR Code Reader</title>
-    <script src="https://unpkg.com/jsqr"></script>
-    <script src="loadGEOJSON.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Code Reader</title>
 </head>
 <body>
-    <video id="qr-video" width="300" height="300"></video>
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.0.0/dist/jsQR.js"></script>
+  <script>
+    async function readQRCode() {
+      try {
+        const video = document.createElement('video');
+        const constraints = { video: true };
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        video.srcObject = stream;
 
-    <script>
-        // Access the webcam
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
-            var video = document.getElementById('qr-video');
-            video.srcObject = stream;
-            video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
-            video.play();
-            requestAnimationFrame(tick);
+        await video.play();
+
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        const geojsonURL = 'data.geojson'; // Změňte na odpovídající cestu ke svému souboru GeoJSON
+
+        const response = await fetch(geojsonURL);
+        const geojsonData = await response.json();
+
+        const qrCode = await new Promise((resolve) => {
+          const onFrame = () => {
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+            const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+            if (code) {
+              resolve(code.data);
+            } else {
+              requestAnimationFrame(onFrame);
+            }
+          };
+
+          onFrame();
         });
 
-        function tick() {
-            var video = document.getElementById('qr-video');
-            if (video.readyState === video.HAVE_ENOUGH_DATA) {
-                var canvas = document.createElement('canvas');
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                var ctx = canvas.getContext('2d');
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                var code = jsQR(imageData.data, imageData.width, imageData.height, {
-                    inversionAttempts: "dontInvert",
-                });
-                if (code) {
-                    // Extracted text from the QR code
-                    var extractedText = code.data;
+        stream.getTracks().forEach(track => track.stop());
 
-                    // Vstupní souřadnice ve formátu JSON
-                    var souradniceJSON = '{'+extractedText+'}';
+        // Porovnání s GeoJSON souřadnicemi
+        const foundFeature = geojsonData.features.find(feature => feature.properties.qrCode === qrCode);
 
-                    // Převedení JSON na objekt
-                    var souradniceObjekt = JSON.parse(souradniceJSON);
-
-                    // Extrahování hodnot x a y z objektu
-                    var x_e = souradniceObjekt.x;
-                    var y_e = souradniceObjekt.y;
-                    
-                    console.log("Extracted Text:", extractedText);
-
-                    // You can now use the 'extractedText' variable as needed.
-                }
-            }
-            requestAnimationFrame(tick);
+        if (foundFeature) {
+          alert('úspěch');
+          const souradnice = foundFeature.geometry.coordinates;
+          console.log('Souradnice:', souradnice);
+        } else {
+          alert('QR kód nebyl nalezen v GeoJSON souboru.');
         }
+      } catch (error) {
+        console.error('Chyba:', error);
+      }
+    }
 
-//--------------------------------------------------------------------------
-//---------------------načtení dat z souboru geojson----------------------
-//--------------------------------------------------------------------------
-let route = "/KHK_rozhledny.geojson";
-fetch(route)
-        .then(response => response.json())
-        .then(data => {
-            function populateTable(features) {
-
-                features.forEach(feature => {
-                    const geometry = feature.geometry;
-                    const coordinates = geometry.coordinates;
-
-                    let nazev = [];
-                    let x = [];
-                    let y = [];
-                    var crd = 0;
-                    var x_p = 0;
-                    var y_p = 0;
-                    
-                    nazev = (feature.properties.nazev);
-                    x = (coordinates[1]);
-                    if(x==x_e){
-                        x_p = 1;
-                    }
-                    y = (coordinates[0]);
-                    if(y==y_e){
-                        y_p = 1;
-                    }
-                    
-                    if(x_p+y_p==2){
-                        crd = extractedText;
-                        alert(crd);
-                        
-                    }
-                });
-
-                
-            }
-            // Získání seznamu prvků (bodů) z GeoJSON dat
-            const features = data.features;
-            // Volání funkce pro vložení dat do tabulky
-            populateTable(features);
-        })
-        .catch(error => console.error('Error loading GeoJSON:', error)); 
-
-
-//--------------------------------------------------------------------------
-//----------------------------------------------
-//--------------------------------------------------------------------------
-
-    
-        
-        
-    </script>
+    readQRCode();
+  </script>
 </body>
 </html>
