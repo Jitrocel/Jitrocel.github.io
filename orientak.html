@@ -79,9 +79,15 @@
 <form id="form">
   <input type="number" id="m" name="m" min="1" placeholder="počet kontrol"><br>
   <input type="number" id="n" name="n" min="1" placeholder="maximální délka"><br>
-  <input type="submit" id="ods" value="Odeslat" onclick="document.getElementById('mapid').style.top="0px";
-;">
+  <input type="submit" id="ods" value="Odeslat" onclick="onclick="startAnimation();">
 </form>
+
+    <script>
+    function startAnimation() {
+        var element = document.getElementByID('mapid')
+        element.classList.add('active');
+      }
+</script>
 
 <div id="mapid"></div>
 
