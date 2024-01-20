@@ -124,7 +124,8 @@
     document.getElementById("form").addEventListener("submit", function(event){
         event.preventDefault()
         const m = document.getElementById("m").value;
-        const n = document.getElementById("n").value;
+        const n_km = document.getElementById("n").value;
+        const n = n_km* 1000
 
         // Vybere náhodné místo
         var p = getRandomPlace();
