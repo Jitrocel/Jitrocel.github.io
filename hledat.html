@@ -75,6 +75,10 @@ alert(filtrat_2);
 
 var geojsonFile = filtrat_2;
 
+var bod_nazev = [];
+var bod_x = [];
+var bod_y = [];
+  
 // Fetch pro načtení dat ze souboru
 fetch(geojsonFile)
   .then(response => response.json())
@@ -85,9 +89,7 @@ fetch(geojsonFile)
       var coordinates = feature.geometry.coordinates;
 
 
-      var bod_nazev = [];
-      var bod_x = [];
-      var bod_y = [];
+      
       // Přiřadíme souřadnice do proměnných x a y
       var x = coordinates[0];
       bod_x.push(x);
