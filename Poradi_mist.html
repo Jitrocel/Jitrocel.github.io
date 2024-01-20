@@ -63,7 +63,7 @@
 function convertToPlaces(mta) {
   var places = [];
 
-  geojsonData.forEach(function (data) {
+  mta.forEach(function (data) {
     var place = {
       "type": "Feature",
       "geometry": {
@@ -71,7 +71,7 @@ function convertToPlaces(mta) {
         "coordinates": [data.y, data.x]  // Pozor na obrácený pořadí [y, x]
       },
       "properties": {
-        "name": data.jmeno
+        "name": data.name
       }
     };
 
