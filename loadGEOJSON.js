@@ -18,7 +18,6 @@
                     x = (coordinates[1]);
                     y = (coordinates[0]);
                     let crd = ("'x':"+x+",'y':"+y);
-                    alert(crd);
                     return(crd);
                 });
             }
@@ -29,4 +28,6 @@
         })
         .catch(error => console.error('Error loading GeoJSON:', error)); 
     }
+
+
     
