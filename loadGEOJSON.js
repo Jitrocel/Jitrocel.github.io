@@ -19,6 +19,7 @@
 
 
                     let nazev = [];
+                    alert(nazev);
                     let x = [];
                     let y = [];
 
