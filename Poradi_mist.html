@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mapa míst</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+</head>
+<body>
+    <div id="map" style="height: 600px;"></div>
+    <script>
+        // Předpokládaný formát databáze míst
+        var places = [
+            {x: 50.0755, y: 14.4378, name: 'Praha'},
+            {x: 49.1922, y: 16.6113, name: 'Brno'},
+            // další místa...
+        ];
+
+        // Vytvoření mapy
+        var map = L.map('map').setView([50.0755, 14.4378], 13);
+
+        // Nastavení vrstvy mapy
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
+
+        // Funkce pro výpočet vzdálenosti mezi dvěma místy
+        function calculateDistance(place1, place2) {
+            var lat1 = place1.x;
+            var lon1 = place1.y;
+            var lat2 = place2.x;
+            var lon2 = place2.y;
+            var R = 6371; // poloměr Země v km
+            var dLat = (lat2 - lat1) * Math.PI / 180;
+            var dLon = (lon2 - lon1) * Math.PI / 180;
+            var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                    Math.sin(dLon/2) * Math.sin(dLon/2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            var d = R * c;
+            return d;
+        }
+
+        // Funkce pro nalezení nejbližšího místa k danému místu
+        function findNearestPlace(place, places) {
+            var nearestPlace = null;
+            var shortestDistance = Infinity;
+            for (var i = 0; i < places.length; i++) {
+                if (places[i] === place) continue;  // Přeskočit již vybrané místo
+                var distance = calculateDistance(place, places[i]);
+                if (distance < shortestDistance) {
+                    shortestDistance = distance;
+                    nearestPlace = places[i];
+                }
+            }
+            return nearestPlace;
+        }
+
+        // Funkce pro výběr náhodného místa a nalezení jeho nejbližšího souseda n-krát
+        function selectAndDisplayPlaces(n) {
+            for (var i = 0; i < n; i++) {
+                var place = places[Math.floor(Math.random() * places.length)];
+                var nearestPlace = findNearestPlace(place, places);
+
+                // Zobrazení míst na mapě
+                L.marker([place.x, place.y]).addTo(map)
+                    .bindPopup(place.name)
+                    .openPopup();
+
+                L.marker([nearestPlace.x, nearestPlace.y]).addTo(map)
+                    .bindPopup(nearestPlace.name)
+                    .openPopup();
+            }
+        }
+
+        // Spustit funkci s požadovaným počtem iterací
+        selectAndDisplayPlaces(5);
+    </script>
+</body>
+</html>
