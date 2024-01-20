@@ -29,7 +29,7 @@ let places = [
 let selectedPlace = places[Math.floor(Math.random() * places.length)];
 
 // Vzdálenost v km
-let n = 25;
+let n = 30;
 
 // Haversine vzorec pro výpočet vzdušné vzdálenosti
 function haversineDistance(place1, place2) {
@@ -68,10 +68,12 @@ function drawMarkers() {
     L.marker([place.x, place.y]).addTo(map)
       .bindPopup(place.name)
       .on('click', () => {
-        // Aktualizujeme vybrané místo a vzdálenost n
-        selectedPlace = place;
-        n -= haversineDistance(selectedPlace, place);
+        // Aktualizujeme vzdálenost n
+        let distance = haversineDistance(selectedPlace, place);
+        n -= distance;
         if (n > 0) {
+          // Aktualizujeme vybrané místo
+          selectedPlace = place;
           drawMarkers();
         }
       })
