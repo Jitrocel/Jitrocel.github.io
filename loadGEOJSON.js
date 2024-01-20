@@ -25,7 +25,6 @@
                     nazev = (feature.properties.nazev);
                     x = (coordinates[1]);
                     y = (coordinates[0]);
-                    alert(nazev + " ; " + x + " ; " + y);
                     //idCell.textContent = feature.id;
                     //nameCell.textContent = feature.properties.name; // Přidání jména (přizpůsobte podle skutečného názvu vlastnosti)
                     //latCell.textContent = coordinates[1];
