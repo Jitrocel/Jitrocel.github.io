@@ -9,8 +9,6 @@
   <script src="https://cdn.jsdelivr.net/npm/jsqr@1.0.0/dist/jsQR.js"></script>
   <script>
    
-// Předpokládáme, že používáte prohlížeč
-
 // Náš cílový soubor s GeoJSON daty
 var geojsonFile = 'KHK_rozhledny.geojson';
 
@@ -18,20 +16,24 @@ var geojsonFile = 'KHK_rozhledny.geojson';
 fetch(geojsonFile)
   .then(response => response.json())
   .then(data => {
-    // Získáme souřadnice
-    var coordinates = data.features[0].geometry.coordinates;
+    // Iterujeme přes všechny prvky (features) v GeoJSON dat
+    data.features.forEach(feature => {
+      // Získáme souřadnice
+      var coordinates = feature.geometry.coordinates;
 
-    // Přiřadíme souřadnice do proměnných x a y
-    var x = coordinates[0];
-    var y = coordinates[1];
+      // Přiřadíme souřadnice do proměnných x a y
+      var x = coordinates[0];
+      var y = coordinates[1];
 
-    // Získáme jméno
-    var name = data.features[0].properties.nazev;
+      // Získáme jméno
+      var name = feature.properties.nazev;
 
-    // Výstup
-    console.log("x:", x);
-    console.log("y:", y);
-    console.log("Jméno:", name);
+      // Výstup pro každý prvek
+      console.log("x:", x);
+      console.log("y:", y);
+      console.log("Název:", name);
+      console.log("-------------------");
+    });
   })
   .catch(error => console.error('Chyba při načítání souboru:', error));
   </script>
