@@ -82,31 +82,31 @@
         //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
         // Funkce pro převod GeoJSON dat do formátu pole places
-        function convertToPlaces(mta) {
-          var places = [];
+        //function convertToPlaces(mta) {
+          //var places = [];
 
-          mta.forEach(function (data) {
-            var place = {
-              "type": "Feature",
-              "geometry": {
-                "type": "Point",
-                "coordinates": [data.x, data.y]  // Pozor na obrácený pořadí [x, y]
-              },
-              "properties": {
-                "name": data.name
-              }
-            };
+         // mta.forEach(function (data) {
+           // var place = {
+             // "type": "Feature",
+              //"geometry": {
+                //"type": "Point",
+               // "coordinates": [data.x, data.y]  // Pozor na obrácený pořadí [x, y]
+             // },
+            //  "properties": {
+              //  "name": data.name
+            //  }
+         //   };
 
-            places.push(place);
-          });
+           // places.push(place);
+//          });
 
-          return places;
+  //        return places;
         }
 
         // Zavolejte funkci pro převod a získání pole places
-        var places = convertToPlaces(mta);
+    //    var places = convertToPlaces(mta);
 
-        console.log(places);
+      //  console.log(places);
 
         //-------------------------------------------------------------------------------------------------------------------------
         //-------------------------------------------------------------------------------------------------------------------------
@@ -116,50 +116,75 @@
         //-------------------------------------------------------------------------------------------------------------------------
         //-------------------------------------------------------------------------------------------------------------------------
 
-        // Náhodně vyber startovní bod
-        var startIndex = Math.floor(Math.random() * places.length);
-        var startPlace = places[startIndex];
+    function calculateDistance(point1, point2) {
+  const dx = point1[0] - point2[0];
+  const dy = point1[1] - point2[1];
+  return Math.sqrt(dx * dx + dy * dy);
+}
 
-        // Náhodně zamíchejte zbývající body
-        places.splice(startIndex, 1);
-        places.sort(() => Math.random() - 0.5);
+function calculateTotalDistance(order, points) {
+  let totalDistance = 0;
+  for (let i = 0; i < order.length - 1; i++) {
+    const point1 = points[order[i]];
+    const point2 = points[order[i + 1]];
+    totalDistance += calculateDistance(point1, point2);
+  }
+  return totalDistance;
+}
 
-        // Vyberte prvních 10 bodů pro trasu
-        var routePlaces = places.slice(0, 10);
+function generatePermutations(arr) {
+  const result = [];
 
-        // Vytvoření mapy Leaflet
-        var mymap = L.map('map').setView([startPlace.geometry.coordinates[0], startPlace.geometry.coordinates[1]], 10);
+  function permute(arr, start) {
+    if (start === arr.length - 1) {
+      result.push([...arr]);
+      return;
+    }
 
-        // Přidání podkladové mapy (např. OpenStreetMap)
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(mymap);
+    for (let i = start; i < arr.length; i++) {
+      [arr[start], arr[i]] = [arr[i], arr[start]];
+      permute(arr, start + 1);
+      [arr[start], arr[i]] = [arr[i], arr[start]]; // backtrack
+    }
+  }
 
-        // Funkce pro vytvoření seznamu souřadnic bodů
-        function getCoordinatesList(points) {
-          return points.map(point => [point.geometry.coordinates[0], point.geometry.coordinates[1]]);
-        }
+  permute(arr, 0);
+  return result;
+}
 
-        // Vykreslení startovního bodu
-        L.marker([startPlace.geometry.coordinates[0], startPlace.geometry.coordinates[1]]).addTo(mymap).bindPopup(startPlace.properties.name);
+function findShortestPath(points) {
+  const n = points.length;
+  const indices = Array.from({ length: n }, (_, index) => index);
 
-        // Vykreslení trasy
-        var routeCoordinates = getCoordinatesList([startPlace].concat(routePlaces));
-        var routeMarker = L.polyline(routeCoordinates, { color: 'blue' }).addTo(mymap);
+  const permutations = generatePermutations(indices);
 
-        // Řešení TSP pro nalezení nejkratší trasy
-        var tspSolver = new TSPSolver();
-        var tspSolution = tspSolver.solve(getCoordinatesList([startPlace].concat(routePlaces)));
+  let shortestPath = permutations[0];
+  let shortestDistance = calculateTotalDistance(permutations[0], points);
 
-        // Seřazení bodů podle pořadí průchodu
-        var orderedPlaces = tspSolution.map(index => index === 0 ? startPlace : routePlaces[index - 1]);
+  for (let i = 1; i < permutations.length; i++) {
+    const currentDistance = calculateTotalDistance(permutations[i], points);
+    if (currentDistance < shortestDistance) {
+      shortestDistance = currentDistance;
+      shortestPath = permutations[i];
+    }
+  }
 
-        // Vykreslení trasy podle pořadí průchodu
-        var orderedRouteCoordinates = getCoordinatesList([startPlace].concat(orderedPlaces));
-        var orderedRouteMarker = L.polyline(orderedRouteCoordinates, { color: 'red' }).addTo(mymap);
+  const result = shortestPath.map(index => points[index]);
+  return result;
+}
 
-      })
-      .catch(error => console.error('Error fetching GeoJSON:', error));
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+          
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+          const result = findShortestPath(mta);
+        console.log(result);
+    
 
   </script>
 
