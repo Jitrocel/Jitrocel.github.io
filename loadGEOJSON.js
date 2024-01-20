@@ -18,7 +18,7 @@
                     //const lonCell = document.createElement('td');
 
 
-                    let jmeno = [];
+                    let nazev = [];
                     let x = [];
                     let y = [];
 
