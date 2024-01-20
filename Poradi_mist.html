@@ -88,23 +88,54 @@
   // Zavolejte funkci pro převod a získání pole places
   var places = convertToPlaces(mta);
 
-  // Výpis výsledného pole places
-  console.log(places);
-  // Vytvoření Leaflet mapy na základě ID elementu
-  var map = L.map('map').setView([50.08804, 14.42076], 13);
 
-  // Přidání mapové podkladové vrstvy (např. OpenStreetMap)
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors'
-  }).addTo(map);
+console.log(places);
+  //-------------------------------------------------------------------------------------------------------------------------
+  //-------------------------------------------------------------------------------------------------------------------------
+  //-------------------------------------------------------------------------------------------------------------------------
+  //---------------------------------tovření tras------------------------------
+  //-------------------------------------------------------------------------------------------------------------------------
+  //-------------------------------------------------------------------------------------------------------------------------
+  //-------------------------------------------------------------------------------------------------------------------------
 
-  // Přidání bodů z pole "places" na mapu
-  places.forEach(function(place) {
-    var marker = L.marker([place.geometry.coordinates[1], place.geometry.coordinates[0]])
-      .bindPopup(place.properties.name)  // Zobrazit název místa při kliknutí na bod
-      .addTo(map);
-  });
-            })</script>
+  
+// Náhodně vyber startovní bod
+var startIndex = Math.floor(Math.random() * places.length);
+var startPlace = places[startIndex];
+
+// Náhodně zamíchejte zbývající body
+places.splice(startIndex, 1);
+places.sort(() => Math.random() - 0.5);
+
+// Vyberte prvních 10 bodů pro trasu
+var routePlaces = places.slice(0, 10);
+
+// Vytvoření mapy Leaflet
+var mymap = L.map('map').setView([startPlace.geometry.coordinates[0], startPlace.geometry.coordinates[1]], 10);
+
+// Přidání podkladové mapy (např. OpenStreetMap)
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(mymap);
+
+// Vykreslení startovního bodu
+L.marker([startPlace.geometry.coordinates[0], startPlace.geometry.coordinates[1]]).addTo(mymap).bindPopup(startPlace.properties.name);
+
+// Vykreslení trasy
+var routeCoordinates = [startPlace.geometry.coordinates];
+routePlaces.forEach(place => {
+  routeCoordinates.push(place.geometry.coordinates);
+  L.marker([place.geometry.coordinates[0], place.geometry.coordinates[1]]).addTo(mymap).bindPopup(place.properties.name);
+});
+
+var polyline = L.polyline(routeCoordinates, {color: 'blue'}).addTo(mymap);
+
+                  
+                  
+                  
+                  
+                  
+    </script>
 
 </body>
 </html>
