@@ -49,7 +49,7 @@ fetch(geojsonFile)
       var name_jm = (feature.properties.nazev);
       bod_nazev.push(name_jm);
 
-      var brg = ("{x: "+ks+", y: "+yy+", name: '"+name_jm+"'}")
+      var brg = ({"x: "+ks+", y: "+yy+", name: '"+name_jm+"'"})
       console.log(brg);
       places.push(brg);
     
