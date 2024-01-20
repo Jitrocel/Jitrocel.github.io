@@ -55,7 +55,7 @@ fetch(geojsonFile)
       // Získáme jméno
       var name = feature.properties.nazev;
       
-      let p_kod = ("'x':"+x+" ,'y':"+y) ;
+      let p_kod = ("x"+x+",y"+y) ;
       console.log(p_kod);
       if(p_kod==code.data){
         var nactena_poloha = name;
