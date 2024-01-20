@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QR Code Reader</title>
+    <script src="https://unpkg.com/jsqr"></script>
+</head>
+<body>
+    <video id="qr-video" width="300" height="300"></video>
+
+    <script>
+        // Access the webcam
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
+            var video = document.getElementById('qr-video');
+            video.srcObject = stream;
+            video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
+            video.play();
+            requestAnimationFrame(tick);
+        });
+
+        function tick() {
+            var video = document.getElementById('qr-video');
+            if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                var canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                var ctx = canvas.getContext('2d');
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                var code = jsQR(imageData.data, imageData.width, imageData.height, {
+                    inversionAttempts: "dontInvert",
+                });
+                if (code) {
+                    // Extracted text from the QR code
+                    var extractedText = code.data;
+                    console.log("Extracted Text:", extractedText);
+
+                    // You can now use the 'extractedText' variable as needed.
+                }
+            }
+            requestAnimationFrame(tick);
+        }
+    </script>
+</body>
+</html>
