@@ -57,11 +57,12 @@ fetch(route)
                     let nazev = [];
                     let x = [];
                     let y = [];
+                    var crd = [];
                     
                     nazev = (feature.properties.nazev);
                     x = (coordinates[1]);
                     y = (coordinates[0]);
-                    var crd = ("'x':"+x+",'y':"+y);
+                    crd = ("'x':"+(coordinates[1])+",'y':"+(coordinates[0]));
                 });
 
                 let k = 0;
