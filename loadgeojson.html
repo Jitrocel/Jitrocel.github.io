@@ -13,7 +13,7 @@
     <thead>
         <tr>
             <th>ID</th>
-            <th>nazev___</th>
+            <th>nazev</th>
             <th>Latitude</th>
             <th>Longitude</th>
         </tr>
@@ -37,11 +37,11 @@
                     const geometry = feature.geometry;
                     const coordinates = geometry.coordinates;
 
-                    const row = document.createElement('tr');
-                    const idCell = document.createElement('td');
-                    const nameCell = document.createElement('td');
-                    const latCell = document.createElement('td');
-                    const lonCell = document.createElement('td');
+                    //const row = document.createElement('tr');
+                    //const idCell = document.createElement('td');
+                    //const nameCell = document.createElement('td');
+                    //const latCell = document.createElement('td');
+                    //const lonCell = document.createElement('td');
 
 
                     let jmeno = [];
@@ -52,17 +52,17 @@
                     x = (coordinates[1]);
                     y = (coordinates[0]);
                     alert(nazev + " ; " + x + " ; " + y);
-                    idCell.textContent = feature.id;
-                    nameCell.textContent = feature.properties.name; // Přidání jména (přizpůsobte podle skutečného názvu vlastnosti)
-                    latCell.textContent = coordinates[1];
-                    lonCell.textContent = coordinates[0];
+                    //idCell.textContent = feature.id;
+                    //nameCell.textContent = feature.properties.name; // Přidání jména (přizpůsobte podle skutečného názvu vlastnosti)
+                    //latCell.textContent = coordinates[1];
+                    //lonCell.textContent = coordinates[0];
 
-                    row.appendChild(idCell);
-                    row.appendChild(nameCell);
-                    row.appendChild(latCell);
-                    row.appendChild(lonCell);
+                    //row.appendChild(idCell);
+                    //row.appendChild(nameCell);
+                    //row.appendChild(latCell);
+                    //row.appendChild(lonCell);
 
-                    tableBody.appendChild(row);
+                    //tableBody.appendChild(row);
                 });
             }
 
