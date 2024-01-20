@@ -25,8 +25,8 @@
                     nazev = (feature.properties.nazev);
                     x = (coordinates[1]);
                     y = (coordinates[0]);
-
-                    return([nazev, x, y]);
+                    let crd = [nazev, x, y];
+                    return(crd);
                     
                     //idCell.textContent = feature.id;
                     //nameCell.textContent = feature.properties.name; // Přidání jména (přizpůsobte podle skutečného názvu vlastnosti)
