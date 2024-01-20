@@ -39,46 +39,34 @@
     }
 
     function getPlacesWithinDistance(p, n, m) {
-        var nearbyPlaces = [];
-
+        // Vybere m náhodných míst v okruhu n od bodu p
+        var selectedPlaces = [];
         for (var i = 0; i < places.length; i++) {
             var place = places[i];
-
-            // Vypočítá vzdálenost od bodu p
             var distance = map.distance([place.x, place.y], [p.x, p.y]);
-
-            // Pokud je vzdálenost menší než n, přidá místo do seznamu
             if (distance <= n) {
-                nearbyPlaces.push(place);
+                selectedPlaces.push(place);
+                if (selectedPlaces.length >= m) {
+                    break;
+                }
             }
         }
-
-        // Vybere m náhodných míst z seznamu
-        var selectedPlaces = [];
-        for (var i = 0; i < m; i++) {
-            var place = nearbyPlaces[Math.floor(Math.random() * nearbyPlaces.length)];
-            selectedPlaces.push(place);
-        }
-
         return selectedPlaces;
     }
 
-    document.getElementById("locationForm").addEventListener("submit", function(event){
-        event.preventDefault()
-        const n = document.getElementById("n").value;
-        const m = document.getElementById("m").value;
+    // Vybere náhodné místo
+    var p = getRandomPlace();
 
-        // Vybere náhodné místo p
-        var p = getRandomPlace();
+    // Vybere m náhodných míst v okruhu n od bodu p
+    var n = 200000; // Maximální vzdálenost v metrech
+    var m = 5; // Počet míst
+    var selectedPlaces = getPlacesWithinDistance(p, n, m);
 
-        // Vybere m náhodných míst v okruhu n od místa p
-        var places = getPlacesWithinDistance(p, n, m);
-
-        // Přidá místa na mapu
-        for (var i = 0; i < places.length; i++) {
-            addMarker(places[i].x, places[i].y, places[i].name);
-        }
-    });
+    // Přidá vybraná místa na mapu
+    for (var i = 0; i < selectedPlaces.length; i++) {
+        var place = selectedPlaces[i];
+        addMarker(place.x, place.y, place.name);
+    }
 </script>
 
 </body>
