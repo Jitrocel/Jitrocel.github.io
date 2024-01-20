@@ -46,5 +46,7 @@
             populateTable(features);
         })
         .catch(error => console.error('Error loading GeoJSON:', error));
+
+        return([nazev, x, y]);
     }
     
