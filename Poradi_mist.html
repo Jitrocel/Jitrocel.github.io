@@ -15,45 +15,29 @@
 
 <script>
   // Pole s místy ve formátu GeoJSON (atributy x, y a name)
-
-var akturl = window.location.href;
-        var urlCasti = akturl.split("?");
-        var kat_sh = urlCasti[1];
-        var katCasti = kat_sh.split("=");
-        var soubor = katCasti[1];
-
-        var geojsonFile = soubor;
-        var bod_nazev = [];
-        var bod_x = [];
-        var bod_y = [];
-        var places = [];
-
-        fetch(geojsonFile)
-            .then(response => response.json())
-            .then(data => {
-                data.features.forEach(feature => {
-                    var coordinates = feature.geometry.coordinates;
-                    var ks = coordinates[0];
-                    bod_x.push(ks);
-                    var yy = coordinates[1];
-                    bod_y.push(yy);
-                    var name_jm = (feature.properties.nazev);
-                    bod_nazev.push(name_jm);
-                    var brg = {
-                        'x': ks,
-                        'y': yy,
-                        'name': name_jm
-                    };
-                    console.log(brg);
-                    places.push(brg);
-                });
-
-                console.log(places);
-
-
-
-
-    
+  var places = [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.42076, 50.08804]  // [x, y]
+      },
+      "properties": {
+        "name": "První místo"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [14.43784, 50.08747]  // [x, y]
+      },
+      "properties": {
+        "name": "Druhé místo"
+      }
+    },
+    // Přidej další místa podle potřeby
+  ];
 
   // Vytvoření Leaflet mapy na základě ID elementu
   var map = L.map('map').setView([50.08804, 14.42076], 13);
@@ -65,10 +49,10 @@ var akturl = window.location.href;
 
   // Přidání bodů z pole "places" na mapu
   places.forEach(function(place) {
-    var marker = L.marker([place.x, place.y])
-      .bindPopup(place.name)  // Zobrazit název místa při kliknutí na bod
+    var marker = L.marker([place.geometry.coordinates[1], place.geometry.coordinates[0]])
+      .bindPopup(place.properties.name)  // Zobrazit název místa při kliknutí na bod
       .addTo(map);
-  }));
+  });
 </script>
 
 </body>
