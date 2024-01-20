@@ -15,8 +15,8 @@
 <body>
 
 <form id="form">
-  <label for="m">Počet kontrol:</label><br>
-  <input type="number" id="m" name="m" min="1"><br>
+  <label for="m">počet kontrol:</label><br>
+  <input type="radio" id="m" name="m" min="1"><br>
   <label for="n">Maximální délka trasy (v metrech):</label><br>
   <input type="number" id="n" name="n" min="1"><br>
   <input type="submit" value="Odeslat">
@@ -25,7 +25,7 @@
 <div id="mapid"></div>
 
 <script>
-    var map = L.map('mapid').setView([50.0755, 14.4378], 7); // Nastavíme střed mapy na Prahu
+    var map = L.map('mapid').setView([50.0755, 14.4378], 8); // Nastavíme střed mapy na Prahu
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
