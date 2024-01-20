@@ -4,35 +4,33 @@
     <script src="https://cdn.rawgit.com/cozmo/jsQR/1.0.1/dist/jsQR.js"></script>
 </head>
 <body>
-    <input type="file" id="qr-input" accept="image/*" />
+    <video id="preview" style="width: 100%; max-width: 600px;" autoplay></video>
     <script>
-        document.getElementById('qr-input').addEventListener('change', function() {
-            let file = this.files[0];
-            let reader = new FileReader();
-            reader.onload = function() {
-                let image = new Image();
-                image.onload = function() {
-                    let canvas = document.createElement('canvas');
-                    let context = canvas.getContext('2d');
-                    canvas.width = image.width;
-                    canvas.height = image.height;
-                    context.drawImage(image, 0, 0, image.width, image.height);
-                    let imageData = context.getImageData(0, 0, image.width, image.height);
-                    let code = jsQR(imageData.data, imageData.width, imageData.height);
-                    if (code) {
-                        let coordinates = code.data.split(',');
-                        let lon = coordinates[0];
-                        let lat = coordinates[1];
-                        console.log('Longitude: ' + lon);
-                        console.log('Latitude: ' + lat);
-                    } else {
-                        console.log('QR kód nebyl nalezen.');
-                    }
-                };
-                image.src = reader.result;
-            };
-            reader.readAsDataURL(file);
-        });
+        var video = document.getElementById('preview');
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+                video.srcObject = stream;
+                video.play();
+                scanQRCode();
+            });
+        }
+
+        function scanQRCode() {
+            var canvas = document.createElement('canvas');
+            var context = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+            var code = jsQR(imageData.data, imageData.width, imageData.height);
+            if (code) {
+                var coordinates = code.data.split(',');
+                var lon = coordinates[0];
+                var lat = coordinates[1];
+                alert('Longitude: ' + lon + ', Latitude: ' + lat);
+            }
+            requestAnimationFrame(scanQRCode);
+        }
     </script>
 </body>
 </html>
