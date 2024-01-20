@@ -40,16 +40,16 @@ fetch(geojsonFile)
 
       
       // Přiřadíme souřadnice do proměnných x a y
-      var x = coordinates[0];
-      bod_x.push(x);
+      var ks = coordinates[0];
+      bod_x.push(ks);
       
-      var y = coordinates[1];
-      bod_y.push(y);
+      var yy = coordinates[1];
+      bod_y.push(yy);
       // Získáme jméno
       var name = (feature.properties.nazev);
       bod_nazev.push(name);
 
-      var brg = ("{x: "+x+", y: "+y+", name: '"+nazev+"'}")
+      var brg = ("{x: "+ks+", y: "+yy+", name: '"+nazev+"'}")
       console.log(brg);
       places.push(brg);
     
