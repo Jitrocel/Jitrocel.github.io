@@ -56,7 +56,9 @@ fetch(route)
 
                     let nazev = [];
                     let x = [];
+                    alert("x: ", x);
                     let y = [];
+                    alert("y: ", y);
                     var crd = [];
                     
                     nazev = (feature.properties.nazev);
@@ -65,14 +67,7 @@ fetch(route)
                     crd = ("'x':"+(coordinates[1])+",'y':"+(coordinates[0]));
                 });
 
-                let k = 0;
-                while(k<(crd.lenght)){
-                    if(crd==extractedText){
-                        console.log(crd);
-                        console.log("-");
-                    }
-                    k++;
-                }
+                
             }
             // Získání seznamu prvků (bodů) z GeoJSON dat
             const features = data.features;
