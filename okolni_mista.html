@@ -70,7 +70,7 @@ function drawMarkers() {
       .on('click', () => {
         // Aktualizujeme vybrané místo a vzdálenost n
         selectedPlace = place;
-        n -= haversineDistance(selectedPlace, place);
+        n = n - haversineDistance(selectedPlace, place);
         if (n > 0) {
           drawMarkers();
         }
