@@ -22,7 +22,7 @@
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
 
-        const geojsonURL = 'data.geojson'; // Změňte na odpovídající cestu ke svému souboru GeoJSON
+        const geojsonURL = 'KHK_rozhledny.geojson'; // Změňte na odpovídající cestu ke svému souboru GeoJSON
 
         const response = await fetch(geojsonURL);
         const geojsonData = await response.json();
