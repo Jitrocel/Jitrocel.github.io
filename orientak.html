@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mapa s body</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        #mapid { height: 600px; }
+    </style>
+</head>
+<body>
+
+<div id="mapid"></div>
+
+<script>
+    var map = L.map('mapid').setView([50.0755, 14.4378], 13); // Nastavíme střed mapy na Prahu
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+    }).addTo(map);
+
+    // Seznam míst
+    var places = [
+        {x: 50.0755, y: 14.4378, name: "Praha"},
+        {x: 49.1951, y: 16.6068, name: "Brno"},
+        {x: 49.7475, y: 13.3776, name: "Plzeň"},
+        // Přidejte další místa podle potřeby
+    ];
+
+    function addMarker(x, y, name) {
+        L.marker([x, y]).addTo(map)
+            .bindPopup(name)
+            .openPopup();
+    }
+
+    function getRandomPlace() {
+        // Vybere náhodné místo ze seznamu
+        return places[Math.floor(Math.random() * places.length)];
+    }
+
+    function getPlacesWithinDistance(p, n, m) {
+        var nearbyPlaces = [];
+
+        for (var i = 0; i < places.length; i++) {
+            var place = places[i];
+
+            // Vypočítá vzdálenost od bodu p
+            var distance = map.distance([place.x, place.y], [p.x, p.y]);
+
+            // Pokud je vzdálenost menší než n, přidá místo do seznamu
+            if (distance <= n) {
+                nearbyPlaces.push(place);
+            }
+        }
+
+        // Vybere m náhodných míst z seznamu
+        var selectedPlaces = [];
+        for (var i = 0; i < m; i++) {
+            var place = nearbyPlaces[Math.floor(Math.random() * nearbyPlaces.length)];
+            selectedPlaces.push(place);
+        }
+
+        return selectedPlaces;
+    }
+
+    document.getElementById("locationForm").addEventListener("submit", function(event){
+        event.preventDefault()
+        const n = document.getElementById("n").value;
+        const m = document.getElementById("m").value;
+
+        // Vybere náhodné místo p
+        var p = getRandomPlace();
+
+        // Vybere m náhodných míst v okruhu n od místa p
+        var places = getPlacesWithinDistance(p, n, m);
+
+        // Přidá místa na mapu
+        for (var i = 0; i < places.length; i++) {
+            addMarker(places[i].x, places[i].y, places[i].name);
+        }
+    });
+</script>
+
+</body>
+</html>
